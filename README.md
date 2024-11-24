@@ -4,24 +4,6 @@
     <h3 align="center">A passionate allround developer </h3>    
 </p>
 
-<p align="center">
-  <a href="https://github.com/MaDHouSe79/ox_inventory_for_qbcore/issues">
-    <img src="https://img.shields.io/github/issues/MaDHouSe79/ox_inventory_for_qbcore"/> 
-  </a>
-  <a href="https://github.com/MaDHouSe79/ox_inventory_for_qbcore/watchers">
-    <img src="https://img.shields.io/github/watchers/MaDHouSe79/ox_inventory_for_qbcore"/> 
-  </a> 
-  <a href="https://github.com/MaDHouSe79/ox_inventory_for_qbcore/network/members">
-    <img src="https://img.shields.io/github/forks/MaDHouSe79/ox_inventory_for_qbcore"/> 
-  </a>  
-  <a href="https://github.com/MaDHouSe79/ox_inventory_for_qbcore/stargazers">
-    <img src="https://img.shields.io/github/stars/MaDHouSe79/ox_inventory_for_qbcore?color=white"/> 
-  </a>
-  <a href="https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/MaDHouSe79/ox_inventory_for_qbcore?color=black"/> 
-  </a>      
-</p>
-
 # My Youtube Channel and Discord
 - [Subscribe](https://www.youtube.com/c/@MaDHouSe79) 
 - [Discord](https://discord.gg/vJ9EukCmJQ)
