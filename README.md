@@ -3,7 +3,7 @@
 - Here a snippet to make it work again with qb-core, read all readme files because i'm not going to help you, this snippet has no support.
 
 # OX_lib
-- Download [OX_Lib](https://github.com/overextended/ox_lib/releases)
+- Download [Clik here](https://github.com/overextended/ox_lib/releases)
  
 # OX_inventory
 - Download [Clik here](https://github.com/overextended/ox_inventory/releases)
