@@ -203,7 +203,7 @@ RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
     elseif type == 'black_money' then
         SendNUIMessage({
             action = 'show',
-            type = 'blackmoney',
+            type = 'black_money',
             blackmoney = Round(amount)
         })
     elseif type == 'crypto' then
