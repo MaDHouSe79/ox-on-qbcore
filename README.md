@@ -12,8 +12,10 @@
 - All credits go the the owner of ox resources, i'm just a dev that make this resources works again for qbcore, because there are quite a few servers that use ox_inventory but are on qb-core.
 - Here a snippet to make it work again with qb-core, read all readme files because i'm not going to help you, this snippet has no support.
 
-# Install OX_inventory for qb-core
+# Install OX_inventory
+[OX_Inventory](https://github.com/overextended/ox_inventory/releases)
 [READ ME](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_inventory/readme.md)
 
-# Install OX_target for qb-core
+# Install OX_target
+[OX_Target](https://github.com/overextended/ox_target/releases)
 [READ ME](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_target/readme.md)
