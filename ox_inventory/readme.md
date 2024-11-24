@@ -9,6 +9,17 @@
 
 
 # ---------- ox_inventory ----------
+# Items
+```lua
+['black_money'] = {
+	label = 'Dirty Money',
+},
+
+['crypto'] = {
+	label = 'Crypto',
+},
+```
+
 # Add code
 - in `ox_inventory/server.lua`
 ```lua
