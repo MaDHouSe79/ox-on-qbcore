@@ -14,8 +14,8 @@
 
 # OX_inventory
 - Download [OX_Inventory](https://github.com/overextended/ox_inventory/releases)
-- READ [SNIPPET](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_inventory/readme.md)
+- READ [SNIPPET](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_inventory/readme.md))
 
 # OX_target
 - Download [OX_Target](https://github.com/overextended/ox_target/releases)
-- READ [SNIPPET](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_target/readme.md)
+- READ [SNIPPET](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_target/readme.md)
