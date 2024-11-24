@@ -1,7 +1,7 @@
 # Install OX_inventory v2.43.3 for qb-core
 - You need all the files except `empty.lua`, no support, just read the files.....
 
-# --------------------- Folder example ---------------------
+# ---------- Folder example ----------
 - `ox_inventory/init.lua`
 - `ox_inventory/setup/convert.lua`
 - `ox_inventory/modules/bridge/qb/client.lua`
