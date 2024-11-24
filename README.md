@@ -13,9 +13,9 @@
 - Here a snippet to make it work again with qb-core, read all readme files because i'm not going to help you, this snippet has no support.
 
 # Install OX_inventory
-[OX_Inventory](https://github.com/overextended/ox_inventory/releases)
-[READ ME](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_inventory/readme.md)
+- [Download](https://github.com/overextended/ox_inventory/releases)
+- [READ ME](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_inventory/readme.md)
 
 # Install OX_target
-[OX_Target](https://github.com/overextended/ox_target/releases)
-[READ ME](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_target/readme.md)
+- [Download](https://github.com/overextended/ox_target/releases)
+- [READ ME](https://github.com/MaDHouSe79/ox_inventory_for_qbcore/blob/main/ox_target/readme.md)
