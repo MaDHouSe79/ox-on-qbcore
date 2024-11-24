@@ -6,9 +6,9 @@
 - Download [OX_Lib](https://github.com/overextended/ox_lib/releases)
  
 # OX_inventory
-- Download [OX_Inventory](https://github.com/overextended/ox_inventory/releases)
-- READ [SNIPPET](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_inventory/readme.md))
+- Download [Clik here](https://github.com/overextended/ox_inventory/releases)
+- READ SNIPPET [Clik here](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_inventory/readme.md)
 
 # OX_target
-- Download [OX_Target](https://github.com/overextended/ox_target/releases)
-- READ [SNIPPET](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_target/readme.md)
+- Download [Clik here](https://github.com/overextended/ox_target/releases)
+- READ SNIPPET [Clik here](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_target/readme.md)
