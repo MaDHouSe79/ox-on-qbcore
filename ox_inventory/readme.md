@@ -11,12 +11,16 @@
 # ---------- ox_inventory ----------
 # Items
 ```lua
+['cash'] = {
+    label = 'Cash',
+},
+
 ['black_money'] = {
-	label = 'Dirty Money',
+    label = 'Dirty Money',
 },
 
 ['crypto'] = {
-	label = 'Crypto',
+    label = 'Crypto',
 },
 ```
 
