@@ -48,7 +48,6 @@ CreateThread(function()
         if GetVehiclePedIsIn(PlayerPedId(), false) ~= 0 then
             local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
             if DoesEntityExist(vehicle) and GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
-                lastVehicle = vehicle
                 local currFuel = GetFuel(vehicle)
                 if currFuel == -1.0 then
                     TriggerServerEvent('ox_fuel:registerVehicle', NetworkGetNetworkIdFromEntity(vehicle))
