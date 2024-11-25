@@ -64,3 +64,12 @@ AddEventHandler('onResourceStart', function(resource)
     StopResource(resource)
 end)
 ```
+
+# Add Code
+- in `ox_fuel/server.lua` around line 38
+```lua
+RegisterNetEvent('ox_fuel:registerVehicle', function(netid)
+    local entity = NetworkGetEntityFromNetworkId(netid)
+    if entity ~= 0 then Entity(entity).state.fuel = math.random(40, 60) end
+end)
+```
