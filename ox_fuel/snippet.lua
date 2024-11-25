@@ -1,3 +1,5 @@
+--[[ Place this code in `ox_fuel/client/fuel.lua` ]] --
+
 local function exportHandler(exportName, func)
     AddEventHandler(('__cfx_export_LegacyFuel_%s'):format(exportName), function(cb)
         cb(func)
