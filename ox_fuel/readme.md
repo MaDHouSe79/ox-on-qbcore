@@ -45,18 +45,18 @@ CreateThread(function()
     -- Fuel consumption
     while true do
         Wait(1000)
-		if GetVehiclePedIsIn(PlayerPedId(), false) ~= 0 then
-			local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-			if DoesEntityExist(vehicle) and GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
-				lastVehicle = vehicle
-				local currFuel = GetFuel(vehicle)
-				if currFuel == -1.0 then
-					TriggerServerEvent('ox_fuel:registerVehicle', NetworkGetNetworkIdFromEntity(vehicle))
-				elseif IsVehicleEngineOn(vehicle) then
-					SetFuel(vehicle, currFuel - config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (config.FuelClasses[GetVehicleClass(vehicle)] or 1.0) / 10) 
-				end
-			end
-		end
+        if GetVehiclePedIsIn(PlayerPedId(), false) ~= 0 then
+            local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+            if DoesEntityExist(vehicle) and GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
+                lastVehicle = vehicle
+                local currFuel = GetFuel(vehicle)
+                if currFuel == -1.0 then
+                    TriggerServerEvent('ox_fuel:registerVehicle', NetworkGetNetworkIdFromEntity(vehicle))
+                elseif IsVehicleEngineOn(vehicle) then
+                    SetFuel(vehicle, currFuel - config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (config.FuelClasses[GetVehicleClass(vehicle)] or 1.0) / 10)
+                end
+            end
+        end
     end
 end)
 
