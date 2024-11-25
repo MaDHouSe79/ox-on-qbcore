@@ -1,10 +1,11 @@
 # Ox-Fuel v1.5.1
 - Place this code in `ox_fuel/client/fuel.lua`
-
 ```lua
 local function exportHandler(exportName, func)
-    AddEventHandler(('__cfx_export_LegacyFuel_%s'):format(exportName), function(cb)
-        cb(func)
+    AddEventHandler(('__cfx_export_%s_%s'):format(string.strsplit('.', exportName, 2)), function(setCB)
+        setCB(func or function()
+            error(("export '%s' is not supported when using ox_inventory"):format(exportName))
+        end)
     end)
 end
 
@@ -23,12 +24,31 @@ local function GetFuel(vehicle)
 end
 exports('GetFuel', GetFuel)
 
-exportHandler('SetFuel', function(vehicle, fuel)
+exportHandler('LegacyFuel.SetFuel', function(vehicle, fuel)
     SetFuel(vehicle, fuel)
 end)
 
-exportHandler('GetFuel', function(vehicle)
+exportHandler('LegacyFuel.GetFuel', function(vehicle)
     return GetFuel(vehicle)
+end)
+
+CreateThread(function()
+    -- Fuel consumption
+    while true do
+        Wait(1000)
+		if GetVehiclePedIsIn(PlayerPedId(), false) ~= 0 then
+			local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+			if DoesEntityExist(vehicle) and GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
+				lastVehicle = vehicle
+				local currFuel = GetFuel(vehicle)
+				if currFuel == -1.0 then
+					TriggerServerEvent('ox_fuel:registerVehicle', NetworkGetNetworkIdFromEntity(vehicle))
+				elseif IsVehicleEngineOn(vehicle) then
+					SetFuel(vehicle, currFuel - config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (config.FuelClasses[GetVehicleClass(vehicle)] or 1.0) / 10) 
+				end
+			end
+		end
+    end
 end)
 
 AddEventHandler('onResourceStart', function(resource)
