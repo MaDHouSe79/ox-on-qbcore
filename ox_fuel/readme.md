@@ -1,7 +1,7 @@
 # Ox-Fuel v1.5.1
 
 # Replace Code
-- in ox_fuel/client/init,lua around line 49 
+- in `ox_fuel/client/init.lua` around line 49 
 ```lua
 if cache.seat == -1 then 
     --CreateThread(startDrivingVehicle) 
