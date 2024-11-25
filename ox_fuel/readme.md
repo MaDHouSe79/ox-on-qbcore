@@ -1,4 +1,4 @@
-# Ox-Fuel 
+# Ox-Fuel v1.5.1
 - Place this code in `ox_fuel/client/fuel.lua`
 
 ```lua
