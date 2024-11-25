@@ -1,6 +1,5 @@
 local function addDeferral(err)
     err = err:gsub("%^%d", "")
-
     AddEventHandler('playerConnecting', function(_, _, deferrals)
         deferrals.defer()
         deferrals.done(err)
@@ -25,16 +24,9 @@ shared.dropslots = GetConvarInt('inventory:dropslots', shared.playerslots)
 shared.dropweight = GetConvarInt('inventory:dropslotcount', shared.playerweight)
 
 do
-    if type(shared.police) == 'string' then
-        shared.police = { shared.police }
-    end
-
+    if type(shared.police) == 'string' then shared.police = { shared.police } end
     local police = table.create(0, shared.police and #shared.police or 0)
-
-    for i = 1, #shared.police do
-        police[shared.police[i]] = 0
-    end
-
+    for i = 1, #shared.police do police[shared.police[i]] = 0 end
     shared.police = police
 end
 
@@ -66,10 +58,8 @@ if IsDuplicityVersion() then
 			]
 		]])),
     }
-
     local accounts = json.decode(GetConvar('inventory:accounts', '["money", "black_money", "crypto"]'))
     server.accounts = table.create(0, #accounts)
-
     for i = 1, #accounts do
         server.accounts[accounts[i]] = 0
     end
@@ -93,31 +83,26 @@ else
         suppresspickups = GetConvarInt('inventory:suppresspickups', 1) == 1,
         disableweapons = GetConvarInt('inventory:disableweapons', 0) == 1,
     }
-
     local ignoreweapons = table.create(0, (client.ignoreweapons and #client.ignoreweapons or 0) + 3)
-
     for i = 1, #client.ignoreweapons do
         local weapon = client.ignoreweapons[i]
         ignoreweapons[tonumber(weapon) or joaat(weapon)] = true
     end
-
-    ignoreweapons[`WEAPON_UNARMED`] = true
-    ignoreweapons[`WEAPON_HANDCUFFS`] = true
-    ignoreweapons[`WEAPON_GARBAGEBAG`] = true
-    ignoreweapons[`OBJECT`] = true
-    ignoreweapons[`WEAPON_HOSE`] = true
-
+    ignoreweapons['WEAPON_UNARMED'] = true
+    ignoreweapons['WEAPON_HANDCUFFS'] = true
+    ignoreweapons['WEAPON_GARBAGEBAG'] = true
+    ignoreweapons['OBJECT'] = true
+    ignoreweapons['WEAPON_HOSE'] = true
     client.ignoreweapons = ignoreweapons
 end
 
 function shared.print(...) print(string.strjoin(' ', ...)) end
-
 function shared.info(...) lib.print.info(string.strjoin(' ', ...)) end
 
 ---Throws a formatted type error.
----```lua
+---'''lua
 ---error("expected %s to have type '%s' (received %s)")
----```
+---'''
 ---@param variable string
 ---@param expected string
 ---@param received string
@@ -128,7 +113,6 @@ end
 -- People like ignoring errors for some reason
 local function spamError(err)
     shared.ready = false
-
     CreateThread(function()
         while true do
             Wait(10000)
@@ -137,7 +121,6 @@ local function spamError(err)
             end)
         end
     end)
-
     addDeferral(err)
     error(err, 0)
 end
@@ -150,20 +133,16 @@ function data(name)
     local file = ('data/%s.lua'):format(name)
     local datafile = LoadResourceFile(shared.resource, file)
     local path = ('@@%s/%s'):format(shared.resource, file)
-
     if not datafile then
         warn(('no datafile found at path %s'):format(path:gsub('@@', '')))
         return {}
     end
-
     local func, err = load(datafile, path)
-
     if not func or err then
         shared.ready = false
         ---@diagnostic disable-next-line: return-type-mismatch
         return spamError(err)
     end
-
     return func()
 end
 
@@ -172,7 +151,6 @@ if not lib then
 end
 
 local success, msg = lib.checkDependency('oxmysql', '2.7.3')
-
 if success then
     success, msg = lib.checkDependency('ox_lib', '3.13.0')
 end
