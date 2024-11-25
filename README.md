@@ -12,3 +12,7 @@
 # OX_target
 - Download [Clik here](https://github.com/overextended/ox_target/releases)
 - READ SNIPPET [Clik here](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_target/readme.md)
+
+# OX_fuel
+- Download [Clik here](https://github.com/overextended/ox_fuel/releases)
+- READ SNIPPET [Clik here](https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/ox_fuel/readme.md)
