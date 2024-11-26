@@ -3,7 +3,7 @@ if not lib then return end
 local Dumpster = {}
 Dumpster.Functions = {}
 
-function Dumpster.Functions.OpenDumpster(entity)
+function Dumpster.Functions.Open(entity)
     local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
 	if not netId then
 		local coords = GetEntityCoords(entity)
@@ -11,16 +11,16 @@ function Dumpster.Functions.OpenDumpster(entity)
 		netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
 	end
 	if netId then
-		client.openInventory('dumpster', 'dumpster'..netId)
+		client.openInventory('dumpster', 'dumpster-'..netId)
 	end
 end
 
 if shared.target then
-	local DumpsterModels = {218085040, 666561306, -58485588, -206690185, 1511880420, 682791951}
-	exports.ox_target:addModel(DumpsterModels, {
+	Dumpster.Models = {218085040, 666561306, -58485588, -206690185, 1511880420, 682791951}
+	exports.ox_target:addModel(Dumpster.Models, {
         icon = 'fas fa-dumpster',
         label = locale('search_dumpster'),
-        onSelect = function(data) return Dumpster.Functions.OpenDumpster(data.entity) end,
+        onSelect = function(data) return Dumpster.Functions.Open(data.entity) end,
         distance = 2
 	})
 end

@@ -6,7 +6,8 @@ require 'modules.interface.client'
 -- Mods for ox_inventory
 require 'mods.parkmeter.client'
 require 'mods.dumpster.client'
-require 'mods.trunk.client'
+require 'mods.binbag.client'
+require 'mods.cellphone.client'
 
 local Utils = require 'modules.utils.client'
 local Weapon = require 'modules.weapon.client'

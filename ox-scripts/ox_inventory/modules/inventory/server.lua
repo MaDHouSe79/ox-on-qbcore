@@ -585,7 +585,7 @@ function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, i
         dbId = dbId
 	}
 
-	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' then
+	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' or invType == 'binbag' or invType == 'cellphone' then
 		self.datastore = true
 	else
 		self.changed = false
@@ -774,6 +774,10 @@ local function generateItems(inv, invType, items)
 	if items == nil then
 		if invType == 'dumpster' then
 			items = randomLoot(server.dumpsterloot)
+		elseif invType == 'binbag' then
+			items = randomLoot(server.binbagloot)
+		elseif invType == 'cellphone' then
+			items = randomLoot(server.cellphoneloot)
 		elseif invType == 'vehicle' then
 			items = randomLoot(server.vehicleloot)
 		end
@@ -818,10 +822,22 @@ function Inventory.Load(id, invType, owner)
         else
             result = result[invType]
         end
+		
 	elseif invType == 'dumpster' then
 		if server.randomloot then
 			return generateItems(id, invType)
 		end
+
+	elseif invType == 'binbag' then
+		if server.randomloot then
+			return generateItems(id, invType)
+		end
+
+	elseif invType == 'cellphone' then
+		if server.randomloot then
+			return generateItems(id, invType)
+		end
+
 	elseif id then
 		result = db.loadStash(owner or '', id)
 	end
