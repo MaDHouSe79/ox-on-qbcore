@@ -1,17 +1,18 @@
 if not lib then return end
 
+require 'modules.inventory.client'
+
 local Trunk = {}
 Trunk.Functions = {}
 Trunk.Vehicles = lib.load('data.vehicles')
 Trunk.BackDoorIds = { 2, 3 }
 
--- Trunks
 function Trunk.Functions.CanAccessTrunk(entity)
     if cache.vehicle or not NetworkGetEntityIsNetworked(entity) then return end
 	local vehicleHash = GetEntityModel(entity)
     local vehicleClass = GetVehicleClass(entity)
     local checkVehicle = Trunk.Vehicles.Storage[vehicleHash]
-    if (checkVehicle == 0 or checkVehicle == 1) or (not Trunk.Vehicles.trunk[vehicleClass] and not Trunk.Vehicles.trunk.models[vehicleHash]) then return end
+    if (checkVehicle == 0 or checkVehicle == 1) or (not Trunk.Vehicles.trunk[vehicleClass] and not Trunk.Trunk.Vehicles.trunk.models[vehicleHash]) then return end
     local doorId = checkVehicle and 4 or 5
     if not GetIsDoorValid(entity, doorId) then
         if vehicleClass ~= 11 and (doorId ~= 5 or GetEntityBoneIndexByName(entity, 'boot') ~= -1 or not GetIsDoorValid(entity, 2)) then return end
@@ -22,7 +23,7 @@ function Trunk.Functions.CanAccessTrunk(entity)
     offset = GetOffsetFromEntityInWorldCoords(entity, offset.x, offset.y, offset.z)
     if #(GetEntityCoords(cache.ped) - offset) < 1.5 then return doorId end
 end
- 
+
 function Trunk.Functions.OpenTrunk(entity)
     local door = Trunk.Functions.CanAccessTrunk(entity)
     if not door then return end
@@ -41,7 +42,6 @@ if shared.target then
 		icon = 'fas fa-truck-ramp-box',
 		label = locale('open_label', locale('storage')),
 		distance = 1.5,
-		canInteract = Trunk.Functions.CanAccessTrunk,
 		onSelect = function(data)
 			return Trunk.Functions.OpenTrunk(data.entity)
 		end
