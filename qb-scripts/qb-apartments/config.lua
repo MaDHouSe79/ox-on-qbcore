@@ -1,4 +1,8 @@
 Apartments = {}
+
+Apartments.UseTarget = true
+Apartments.Target = "ox_target" -- qb-target or ox_target
+
 Apartments.Starting = true
 Apartments.SpawnOffset = 30
 Apartments.Locations = {

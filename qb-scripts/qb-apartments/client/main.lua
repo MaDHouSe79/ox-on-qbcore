@@ -162,16 +162,28 @@ local function RegisterApartmentEntranceTarget(apartmentID, apartmentData)
         label = Lang:t('text.ring_doorbell'),
     }
 
-    exports['qb-target']:AddBoxZone(boxName, coords, boxData.length, boxData.width, {
-        name = boxName,
-        heading = boxData.heading,
-        debugPoly = boxData.debug,
-        minZ = boxData.minZ,
-        maxZ = boxData.maxZ,
-    }, {
-        options = options,
-        distance = boxData.distance
-    })
+    if Apartments.Target == "qb-target" then
+        exports['qb-target']:AddBoxZone(boxName, coords, boxData.length, boxData.width, {
+            name = boxName,
+            heading = boxData.heading,
+            debugPoly = boxData.debug,
+            minZ = boxData.minZ,
+            maxZ = boxData.maxZ,
+        }, {
+            options = options,
+            distance = boxData.distance
+        })
+
+    elseif Apartments.Target == "ox_target" then
+        exports.ox_target:addBoxZone({
+            coords = coords,
+            radius = 1.0,
+            debug = false,
+            drawSprite = false,
+            options = options,
+            distance = 1.5
+        })
+    end
 
     boxData.created = true
 end
@@ -240,17 +252,30 @@ local function RegisterInApartmentTarget(targetKey, coords, heading, options)
     end
 
     local boxName = 'inApartmentTarget_' .. targetKey
-    exports['qb-target']:AddBoxZone(boxName, coords, 1.5, 1.5, {
-        name = boxName,
-        heading = heading,
-        minZ = coords.z - 1.0,
-        maxZ = coords.z + 5.0,
-        debugPoly = false,
-    }, {
-        options = options,
-        distance = 1
-    })
 
+    if Apartments.Target == "qb-target" then
+        exports['qb-target']:AddBoxZone(boxName, coords, 1.5, 1.5, {
+            name = boxName,
+            heading = heading,
+            minZ = coords.z - 1.0,
+            maxZ = coords.z + 5.0,
+            debugPoly = false,
+        }, {
+            options = options,
+            distance = 1
+        })
+    elseif Apartments.Target == "ox_target" then
+        exports.ox_target:addBoxZone({
+            coords = coords,
+            radius = 1.5,
+            minZ = coords.z - 1.0,
+            maxZ = coords.z + 5.0,
+            options = options,
+            distance = 1.5,
+            debug = false,
+            drawSprite = false,
+        })
+    end
     InApartmentTargets[targetKey] = InApartmentTargets[targetKey] or {}
     InApartmentTargets[targetKey].created = true
 end
@@ -261,7 +286,7 @@ local function SetApartmentsEntranceTargets()
     if Apartments.Locations and next(Apartments.Locations) then
         for id, apartment in pairs(Apartments.Locations) do
             if apartment and apartment.coords and apartment.coords['enter'] then
-                if UseTarget then
+                if Apartments.UseTarget then
                     RegisterApartmentEntranceTarget(id, apartment)
                 else
                     RegisterApartmentEntranceZone(id, apartment)
@@ -282,7 +307,7 @@ local function SetInApartmentTargets()
     local outfitsPos = vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.clothes.x, Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.clothes.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.clothes.z)
     local logoutPos = vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.logout.x, Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.logout.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.logout.z)
 
-    if UseTarget then
+    if Apartments.UseTarget then
         RegisterInApartmentTarget('entrancePos', entrancePos, 0, {
             {
                 type = 'client',
@@ -332,8 +357,12 @@ end
 local function DeleteApartmentsEntranceTargets()
     if Apartments.Locations and next(Apartments.Locations) then
         for id, apartment in pairs(Apartments.Locations) do
-            if UseTarget then
-                exports['qb-target']:RemoveZone('apartmentEntrance_' .. id)
+            if Apartments.UseTarget then
+                if Apartments.Target == "qb-target" then
+                    exports['qb-target']:RemoveZone('apartmentEntrance_' .. id)
+                elseif Apartments.Target == "ox_target" then
+                    exports.ox_target:removeZone('apartmentEntrance_' .. id)
+                end
             else
                 if apartment.polyzoneBoxData.zone then
                     apartment.polyzoneBoxData.zone:destroy()
@@ -353,8 +382,12 @@ local function DeleteInApartmentTargets()
 
     if InApartmentTargets and next(InApartmentTargets) then
         for id, apartmentTarget in pairs(InApartmentTargets) do
-            if UseTarget then
-                exports['qb-target']:RemoveZone('inApartmentTarget_' .. id)
+            if Apartments.UseTarget then
+                if Apartments.Target == "qb-target" then
+                    exports['qb-target']:RemoveZone('inApartmentTarget_' .. id)
+                elseif Apartments.Target == "ox_target" then
+                    exports.ox_target:removeZone('inApartmentTarget_' .. id)
+                end
             else
                 if apartmentTarget.zone then
                     apartmentTarget.zone:destroy()

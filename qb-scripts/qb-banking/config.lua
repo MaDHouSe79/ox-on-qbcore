@@ -1,5 +1,5 @@
 Config = {
-    useTarget = GetConvar('UseTarget', 'false') == 'true',
+    useTarget = true,--GetConvar('UseTarget', 'false') == 'true',
     target = "ox_target",
     inventory  = "ox_inventory",
     atmModels = { 'prop_atm_01', 'prop_atm_02', 'prop_atm_03', 'prop_fleeca_atm' },
