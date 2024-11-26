@@ -165,16 +165,18 @@ if Config.useTarget then
                     distance = 1.5
                 })
             elseif Config.target == "ox_target" then
-                exports.ox_target.addSphereZone('bank_' .. i, Config.locations[i], 1.0, {
-                    name = 'bank_' .. i,
-                    useZ = true,
-                    debugPoly = false,
-                }, {
+                exports.ox_target:addSphereZone({
+                    coords = Config.locations[i],
+                    radius = 1.0,
+                    debug = false,
+                    drawSprite = false,
                     options = {
                         {
+                            name = 'bank_sphere',
+                            event = 'ox_target:debug',
                             icon = 'fas fa-university',
-                            label = 'Open Bank',
-                            action = function()
+                            label = "Open Bank",
+                            onSelect = function()
                                 OpenBank()
                             end,
                         }
