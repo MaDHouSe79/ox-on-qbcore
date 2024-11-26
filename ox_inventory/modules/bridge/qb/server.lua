@@ -103,14 +103,9 @@ end
 
 AddEventHandler('QBCore:Server:OnMoneyChange', function(src, account, amount, changeType)
     if account ~= "cash" then return end
-
     local item = Inventory.GetItem(src, 'money', nil, false)
-
     if not item then return end
-
-    Inventory.SetItem(src, 'money',
-        changeType == "set" and amount or changeType == "remove" and item.count - amount or
-        changeType == "add" and item.count + amount)
+    Inventory.SetItem(src, 'money', changeType == "set" and amount or changeType == "remove" and item.count - amount or changeType == "add" and item.count + amount)
 end)
 
 ---@diagnostic disable-next-line: duplicate-set-field
