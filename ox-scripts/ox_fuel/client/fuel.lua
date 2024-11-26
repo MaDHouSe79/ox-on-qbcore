@@ -3,7 +3,6 @@ local state = require 'client.state'
 local utils = require 'client.utils'
 local fuel = {}
 
-
 local function exportHandler(exportName, func)
     AddEventHandler(('__cfx_export_%s_%s'):format(string.strsplit('.', exportName, 2)), function(setCB)
         setCB(func or function()
@@ -42,7 +41,6 @@ CreateThread(function()
 		if GetVehiclePedIsIn(PlayerPedId(), false) ~= 0 then
 			local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 			if DoesEntityExist(vehicle) and GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
-				lastVehicle = vehicle
 				local currFuel = GetFuel(vehicle)
 				if currFuel == -1.0 then
 					TriggerServerEvent('ox_fuel:registerVehicle', NetworkGetNetworkIdFromEntity(vehicle))
