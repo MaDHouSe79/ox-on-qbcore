@@ -13,7 +13,7 @@ function Trunk.Functions.CanAccessTrunk(entity)
     local checkVehicle = Trunk.Vehicles.Storage[vehicleHash]
     if (checkVehicle == 0 or checkVehicle == 1) or (not Trunk.Vehicles.trunk[vehicleClass] and not Trunk.Vehicles.trunk.models[vehicleHash]) then return end
     local doorId = checkVehicle and 4 or 5
-    if not Trunk.Vehicles.trunk.boneIndex[vehicleHash] and not GetIsDoorValid(entity, doorId) then
+    if not GetIsDoorValid(entity, doorId) then
         if vehicleClass ~= 11 and (doorId ~= 5 or GetEntityBoneIndexByName(entity, 'boot') ~= -1 or not GetIsDoorValid(entity, 2)) then return end
         if vehicleClass ~= 11 then doorId = Trunk.BackDoorIds end
     end
@@ -24,7 +24,7 @@ function Trunk.Functions.CanAccessTrunk(entity)
 end
  
 function Trunk.Functions.OpenTrunk(entity)
-    local door = Inventory.CanAccessTrunk(entity)
+    local door = Trunk.Functions.CanAccessTrunk(entity)
     if not door then return end
     local coords = GetEntityCoords(entity)
     TaskTurnPedToFaceCoord(cache.ped, coords.x, coords.y, coords.z, 0)
