@@ -43,7 +43,7 @@ RegisterNetEvent('ox_inventory:steal', function(pos)
 end)
 
 lib.callback.register('ox_inventory:check', function(source, pos)
-    for k, v in pairs(paid) do if #(pos - v.coords) <= 3 then return true end end
+    for k, v in pairs(Parkmeter.Paid) do if #(pos - v.coords) <= 3 then return true end end
     return false
 end)
 
