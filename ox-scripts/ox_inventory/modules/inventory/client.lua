@@ -2,8 +2,130 @@ if not lib then return end
 
 local Inventory = {}
 
-local Utils = require 'modules.utils.client'
+Inventory.Dumpsters = {218085040, 666561306, -58485588, -206690185, 1511880420, 682791951}
+Inventory.Binbags = {1388415578, -1998455445, 1627301588, -935625561, -675277761, 628215202, 1948359883, -375613925, 1813879595, 1388308576, -289082718, 1098827230, 897494494, -1681329307, 1138881502, -1895783233, -1734625067, -819563011}
 
+function Inventory.OpenDumpster(entity)
+	local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
+
+	if not netId then
+		local coords = GetEntityCoords(entity)
+		entity = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, GetEntityModel(entity), true, true, true)
+		netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
+	end
+
+	if netId then
+		client.openInventory('dumpster', 'dumpster'..netId)
+	end
+end
+
+function Inventory.OpenBinbag(entity)
+	local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
+	if not netId then
+		local coords = GetEntityCoords(entity)
+		entity = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, GetEntityModel(entity), true, true, true)
+		netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
+	end
+
+	if netId then
+		client.openInventory('binbag', 'binbag'..netId)
+	end
+end
+
+local Utils = require 'modules.utils.client'
+local Vehicles = lib.load('data.vehicles')
+local backDoorIds = { 2, 3 }
+
+function Inventory.CanAccessTrunk(entity)
+    if cache.vehicle or not NetworkGetEntityIsNetworked(entity) then return end
+
+	local vehicleHash = GetEntityModel(entity)
+    local vehicleClass = GetVehicleClass(entity)
+    local checkVehicle = Vehicles.Storage[vehicleHash]
+
+    if (checkVehicle == 0 or checkVehicle == 1) or (not Vehicles.trunk[vehicleClass] and not Vehicles.trunk.models[vehicleHash]) then return end
+
+    ---@type number | number[]
+    local doorId = checkVehicle and 4 or 5
+
+    if not Vehicles.trunk.boneIndex?[vehicleHash] and not GetIsDoorValid(entity, doorId --[[@as number]]) then
+        if vehicleClass ~= 11 and (doorId ~= 5 or GetEntityBoneIndexByName(entity, 'boot') ~= -1 or not GetIsDoorValid(entity, 2)) then
+            return
+        end
+
+        if vehicleClass ~= 11 then
+            doorId = backDoorIds
+        end
+    end
+
+    local min, max = GetModelDimensions(vehicleHash)
+    local offset = (max - min) * (not checkVehicle and vec3(0.5, 0, 0.5) or vec3(0.5, 1, 0.5)) + min
+    offset = GetOffsetFromEntityInWorldCoords(entity, offset.x, offset.y, offset.z)
+
+    if #(GetEntityCoords(cache.ped) - offset) < 1.5 then
+        return doorId
+    end
+end
+
+function Inventory.OpenTrunk(entity)
+    ---@type number | number[] | nil
+    local door = Inventory.CanAccessTrunk(entity)
+
+    if not door then return end
+
+    local coords = GetEntityCoords(entity)
+
+    TaskTurnPedToFaceCoord(cache.ped, coords.x, coords.y, coords.z, 0)
+
+    if not client.openInventory('trunk', { netid = NetworkGetNetworkIdFromEntity(entity), entityid = entity, door = door }) then return end
+
+    if type(door) == 'table' then
+        for i = 1, #door do
+            SetVehicleDoorOpen(entity, door[i], false, false)
+        end
+    else
+        SetVehicleDoorOpen(entity, door --[[@as number]], false, false)
+    end
+end
+
+if shared.target then
+
+	exports.ox_target:addModel(Inventory.Binbags, {
+		icon = 'fa-trash',
+		label = locale('search_binbag'),
+		onSelect = function(data) return Inventory.OpenBinbag(data.entity) end,
+		distance = 2
+	})
+
+	exports.ox_target:addModel(Inventory.Dumpsters, {
+        icon = 'fas fa-dumpster',
+        label = locale('search_dumpster'),
+        onSelect = function(data) return Inventory.OpenDumpster(data.entity) end,
+        distance = 2
+	})
+
+    exports.ox_target:addGlobalVehicle({
+        icon = 'fas fa-truck-ramp-box',
+        label = locale('open_label', locale('storage')),
+        distance = 1.5,
+        canInteract = Inventory.CanAccessTrunk,
+        onSelect = function(data)
+            return Inventory.OpenTrunk(data.entity)
+        end
+    })
+else
+	local dumpsters = table.create(0, #Inventory.Dumpsters)
+
+	for i = 1, #Inventory.Dumpsters do
+		dumpsters[Inventory.Dumpsters[i]] = true
+	end
+
+	Inventory.Dumpsters = dumpsters
+end
+
+RegisterNetEvent('ox_inventory:mods:notify', function(title, description, type)
+	lib.notify({title = title, description = description, type = type})
+end)
 
 ---@param search 'slots' | 1 | 'count' | 2
 ---@param item table | string

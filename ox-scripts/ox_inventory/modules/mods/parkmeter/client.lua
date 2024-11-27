@@ -1,11 +1,11 @@
 if not lib then return end
 
+local Utils = require 'modules.utils.client'
+
 local Parkmeter = {}
 Parkmeter.Functions = {}
 Parkmeter.Robbed = {}
 Parkmeter.Models = {-1940238623, -544726684, 2108567945, 1447355784}
-
-local Utils = require 'modules.utils.client'
 
 function Parkmeter.Functions.PayFee(entity)
 	TriggerServerEvent('ox_inventory:payoarkfee', GetEntityCoords(entity))
@@ -22,7 +22,7 @@ function Parkmeter.Functions.Lockpick(entity)
 			netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
 		end
 		if netId then
-			client.openInventory('parkmeter', 'parkmeter-'..netId)
+            TriggerServerEvent('ox_inventory:parkmeterrobbery', GetEntityCoords(entity))
 		end
 	end
 end
@@ -32,15 +32,13 @@ function Parkmeter.Functions.HasLockpick()
 	return (count >= 1)
 end
 
-function Parkmeter.Functions.CheckFee(entity)
-    lib.callback('ox_inventory:check', false, function(isPaid)
-        if isPaid then
-            Utils.Notify({title = 'Parking', description = 'Parkeren is betaald!', type = 'success'})
-		else
-            Utils.Notify({title = 'Parking', description = 'Parkeren is niet betaald!', type = 'error'})
-		end
-    end, GetEntityCoords(entity))
+function Parkmeter.Functions.HasJob()
+    local hasJob = false
+    print(json.encode(PlayerData.job,{indent=true}))
+    if (PlayerData.job == "police" or PlayerData.job.name == "police") then hasJob = true end
+    return hasJob
 end
+
 
 if shared.target then
 	-- parkmeter
@@ -56,8 +54,8 @@ if shared.target then
             type = "client",
             icon = "fas fa-parking",
             label = locale('check_fee'),
-            groups = "police",
-            onSelect = function(data) return Parkmeter.Functions.CheckFee(data.entity) end,
+            canInteract = Parkmeter.Functions.HasJob,
+            onSelect = function(data) return TriggerServerEvent('ox_inventory:checkmeter', GetEntityCoords(data.entity)) end,
             distance = 2
         },
         {

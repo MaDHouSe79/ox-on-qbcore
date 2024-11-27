@@ -584,14 +584,13 @@ function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, i
         dbId = dbId
 	}
 
-	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' then
+	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' or invType == 'binbag' then
 		self.datastore = true
 	else
 		self.changed = false
 
-		if invType ~= 'glovebox' and invType ~= 'trunk' then
+		if invType ~= 'glovebox' and invType ~= 'trunk' and invType ~= 'apartment' and invType ~= 'house' then
 			self.dbId = id
-
 			if invType ~= 'player' and owner and type(owner) ~= 'boolean' then
 				self.id = ('%s:%s'):format(self.id, owner)
 			end
@@ -706,6 +705,10 @@ function Inventory.Save(inv)
         return db.saveTrunk(inv.dbId, data)
     elseif inv.type == 'glovebox' then
         return db.saveGlovebox(inv.dbId, data)
+	elseif inv.type == 'apartment' then
+        return db.saveApartment(inv.dbId, data)
+	elseif inv.type == 'house' then
+        return db.saveHouse(inv.dbId, data)
     end
 
     return db.saveStash(inv.owner, inv.dbId, data)
@@ -773,6 +776,8 @@ local function generateItems(inv, invType, items)
 	if items == nil then
 		if invType == 'dumpster' then
 			items = randomLoot(server.dumpsterloot)
+		elseif invType == 'binbag' then
+			items = randomLoot(server.binbagloot)
 		elseif invType == 'vehicle' then
 			items = randomLoot(server.vehicleloot)
 		end
@@ -821,6 +826,12 @@ function Inventory.Load(id, invType, owner)
 		if server.randomloot then
 			return generateItems(id, invType)
 		end
+
+	elseif invType == 'binbag' then
+		if server.randomloot then
+			return generateItems(id, invType)
+		end
+
 	elseif id then
 		result = db.loadStash(owner or '', id)
 	end

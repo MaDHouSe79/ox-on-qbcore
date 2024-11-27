@@ -3,11 +3,8 @@ if not lib then return end
 require 'modules.bridge.client'
 require 'modules.interface.client'
 
-require 'modules.mods.binbag.client'
 require 'modules.mods.cellphone.client'
-require 'modules.mods.dumpster.client'
 require 'modules.mods.parkmeter.client'
-
 
 local Utils = require 'modules.utils.client'
 local Weapon = require 'modules.weapon.client'
@@ -160,6 +157,11 @@ function client.openInventory(inv, data)
 	if inv == 'dumpster' and cache.vehicle then
 		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
 	end
+
+	if inv == 'binbag' and cache.vehicle then
+		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
+	end
+
 
 	if not canOpenInventory() then
         return lib.notify({ id = 'inventory_player_access', type = 'error', description = locale('inventory_player_access') })
@@ -823,6 +825,10 @@ local function registerCommands()
 
 				if Inventory.Dumpsters[model] then
 					return Inventory.OpenDumpster(entity)
+				end
+
+				if Inventory.Binbags[model] then
+					return Inventory.OpenBinbag(entity)
 				end
 			end
 

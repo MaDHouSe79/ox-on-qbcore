@@ -14,15 +14,16 @@ end
 
 shared = {
     resource = GetCurrentResourceName(),
-    framework = GetConvar('inventory:framework', 'qb'),
-    playerslots = GetConvarInt('inventory:slots', 50),
-    playerweight = GetConvarInt('inventory:weight', 30000),
-    target = GetConvarInt('inventory:target', 0) == 1,
-    police = json.decode(GetConvar('inventory:police', '["police", "sheriff"]')),
+    framework = 'qb',
+    playerslots = 50,
+    playerweight = 30000,
+    target = true,
+    lockpickItem = "lockpick",
+    police = json.decode('["police", "sheriff"]'),
 }
 
-shared.dropslots = GetConvarInt('inventory:dropslots', shared.playerslots)
-shared.dropweight = GetConvarInt('inventory:dropslotcount', shared.playerweight)
+shared.dropslots = shared.playerslots
+shared.dropweight = shared.playerweight
 
 do
     if type(shared.police) == 'string' then
@@ -46,7 +47,6 @@ if IsDuplicityVersion() then
         randomloot = GetConvarInt('inventory:randomloot', 1) == 1,
         evidencegrade = GetConvarInt('inventory:evidencegrade', 2),
         trimplate = GetConvarInt('inventory:trimplate', 1) == 1,
-        
         vehicleloot = json.decode(GetConvar('inventory:vehicleloot', [[
 			[
 				["sprunk", 1, 1],
@@ -73,19 +73,7 @@ if IsDuplicityVersion() then
 				["mustard", 1, 1],
 				["garbage", 1, 3],
 				["money", 1, 10],
-				["burger", 1, 1],
-			]
-		]])),
-
-        cellphoneloot = json.decode(GetConvar('inventory:cellphoneloot', [[
-			[
-				["money", 1, 10],
-			]
-		]])),
-
-        parkmeterloot = json.decode(GetConvar('inventory:parkmeterloot', [[
-			[
-				["money", 1, 10],
+				["burger", 1, 1]
 			]
 		]])),
     }

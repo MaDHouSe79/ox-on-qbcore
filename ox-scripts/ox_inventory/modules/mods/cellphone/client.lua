@@ -1,9 +1,11 @@
 if not lib then return end
 
+
 local Cellphone = {}
 Cellphone.Functions = {}
+Cellphone.Models = {-78626473, 295857659, 1158960338, -2103798695, 1511539537, 1281992692}
 
-function Cellphone.Functions.Open(entity)
+function Cellphone.Functions.Lockpick(entity)
 	local success = lib.skillCheck({'easy'}, {'1', '2', '3', '4'})
 	if success then
 		local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
@@ -13,17 +15,23 @@ function Cellphone.Functions.Open(entity)
 			netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
 		end
 		if netId then
-			client.openInventory('cellphone', 'cellphone-'..netId)
+			TriggerServerEvent('ox_inventory:cellphonerobbery', GetEntityCoords(entity))
 		end
 	end
 end
 
+function Cellphone.Functions.HasLockpick()
+	local count = exports.ox_inventory:Search('count', shared.lockpickItem)
+	return (count >= 1)
+end
+
+
 if shared.target then
-	Cellphone.Models = {-78626473, 295857659, 1158960338, -2103798695, 1511539537, 1281992692}
 	exports.ox_target:addModel(Cellphone.Models, {
         icon = 'fas fa-dumpster',
         label = locale('lockpick'),
-        onSelect = function(data) return Cellphone.Functions.Open(data.entity) end,
+		canInteract = Cellphone.Functions.HasLockpick,
+        onSelect = function(data) return Cellphone.Functions.Lockpick(data.entity) end,
         distance = 2
 	})
 end

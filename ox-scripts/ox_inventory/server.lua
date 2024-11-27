@@ -4,10 +4,12 @@ require 'modules.bridge.server'
 require 'modules.crafting.server'
 require 'modules.shops.server'
 require 'modules.pefcl.server'
+
+require 'modules.mods.cellphone.server'
 require 'modules.mods.parkmeter.server'
 
 if GetConvar('inventory:versioncheck', 'true') == 'true' then
-	lib.versionCheck('overextended/ox_inventory')
+	--lib.versionCheck('overextended/ox_inventory')
 end
 
 local TriggerEventHooks = require 'modules.hooks.server'
@@ -171,7 +173,6 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 			end
 
 		elseif invType == 'apartment' then
-			---@cast data string
 			right = Inventory(data)
 			if not right then
 				right = Inventory.Create(data, data:gsub("^%l", string.upper), invType, 15, 0, 100000, false)
@@ -182,7 +183,8 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 			if not right then
 				right = Inventory.Create(data, data:gsub("^%l", string.upper), invType, 15, 0, 100000, false)
 			end
-			
+
+
 		elseif invType == 'dumpster' then
 			right = Inventory(data)
 			if not right then
@@ -201,25 +203,7 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 				end
 			end
 
-		elseif invType == 'cellphone' then
-			right = Inventory(data)
-			if not right then
-				local netid = tonumber(data:sub(9))
-				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
-					right = Inventory.Create(data, locale('cellphone'), invType, 15, 0, 100000, false)
-				end
-			end
-
-		elseif invType == 'parkmeter' then
-			right = Inventory(data)
-			if not right then
-				local netid = tonumber(data:sub(9))
-				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
-					right = Inventory.Create(data, locale('parkmeter'), invType, 15, 0, 100000, false)
-				end
-			end
-
-
+			
 
 		elseif invType == 'container' then
 			left.containerSlot = data --[[@as number]]
@@ -523,11 +507,9 @@ end)
 
 local function conversionScript()
 	shared.ready = false
-
 	local file = 'setup/convert.lua'
 	local import = LoadResourceFile(shared.resource, file)
 	local func = load(import, ('@@%s/%s'):format(shared.resource, file)) --[[@as function]]
-
 	conversionScript = func()
 end
 
@@ -535,13 +517,8 @@ RegisterCommand('convertinventory', function(source, args)
 	if source ~= 0 then return warn('This command can only be executed with the server console.') end
 	if type(conversionScript) == 'function' then conversionScript() end
 	local arg = args[1]
-
 	local convert = arg and conversionScript[arg]
-
-	if not convert then
-		return warn('Invalid conversion argument. Valid options: esx, esxproperty')
-	end
-
+	if not convert then return warn('Invalid conversion argument. Valid options: esx, esxproperty, qbx, qb') end
 	CreateThread(convert)
 end, true)
 
@@ -557,18 +534,14 @@ lib.addCommand({'additem', 'giveitem'}, {
 	restricted = 'group.admin',
 }, function(source, args)
 	local item = Items(args.item)
-
 	if item then
 		local inventory = Inventory(args.target) --[[@as OxInventory]]
 		local count = args.count or 1
 		local success, response = Inventory.AddItem(inventory, item.name, count, args.type and { type = tonumber(args.type) or args.type })
-
 		if not success then
 			return Citizen.Trace(('Failed to give %sx %s to player %s (%s)'):format(count, item.name, args.target, response))
 		end
-
 		source = Inventory(source) or { label = 'console', owner = 'console' }
-
 		if server.loglevel > 0 then
 			lib.logger(source.owner, 'admin', ('"%s" gave %sx %s to "%s"'):format(source.label, count, item.name, inventory.label))
 		end

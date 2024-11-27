@@ -3,8 +3,7 @@ if not lib then return end
 local Query = {
     SELECT_STASH = 'SELECT data FROM ox_inventory WHERE owner = ? AND name = ?',
     UPDATE_STASH = 'UPDATE ox_inventory SET data = ? WHERE owner = ? AND name = ?',
-    UPSERT_STASH =
-    'INSERT INTO ox_inventory (data, owner, name) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data)',
+    UPSERT_STASH = 'INSERT INTO ox_inventory (data, owner, name) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data)',
     INSERT_STASH = 'INSERT INTO ox_inventory (owner, name) VALUES (?, ?)',
     SELECT_GLOVEBOX = 'SELECT plate, glovebox FROM `{vehicle_table}` WHERE `{vehicle_column}` = ?',
     SELECT_TRUNK = 'SELECT plate, trunk FROM `{vehicle_table}` WHERE `{vehicle_column}` = ?',
@@ -12,6 +11,12 @@ local Query = {
     UPDATE_TRUNK = 'UPDATE `{vehicle_table}` SET trunk = ? WHERE `{vehicle_column}` = ?',
     UPDATE_GLOVEBOX = 'UPDATE `{vehicle_table}` SET glovebox = ? WHERE `{vehicle_column}` = ?',
     UPDATE_PLAYER = 'UPDATE `{user_table}` SET inventory = ? WHERE `{user_column}` = ?',
+
+    SELECT_APARTMENT = "SELECT data FROM ox_inventory WHERE owner = ? AND name = ?",
+    UPDATE_APARTMENT = "UPDATE ox_inventory SET data = ? WHERE owner = ? AND name = ?",
+
+    SELECT_HOUSE = "SELECT data FROM ox_inventory WHERE owner = ? AND name = ?",
+    UPDATE_HOUSE = "UPDATE ox_inventory SET data = ? WHERE owner = ? AND name = ?",
 }
 
 Citizen.CreateThreadNow(function()
@@ -158,6 +163,22 @@ end
 
 function db.loadTrunk(id)
     return MySQL.prepare.await(Query.SELECT_TRUNK, { id })
+end
+
+function db.saveApartment(owner, dbId, inventory)
+    return MySQL.prepare(Query.UPDATE_APARTMENT, { inventory, owner and tostring(owner) or '', dbId })
+end
+
+function db.loadApartment(owner, name)
+    return MySQL.prepare.await(Query.SELECT_APARTMENT, { owner and tostring(owner) or '', name })
+end
+
+function db.saveHouse(owner, dbId, inventory)
+    return MySQL.prepare(Query.UPDATE_HOUSE, { inventory, owner and tostring(owner) or '', dbId })
+end
+
+function db.loadHouse(owner, name)
+    return MySQL.prepare.await(Query.SELECT_HOUSE, { owner and tostring(owner) or '', name })
 end
 
 ---@param rows number | MySQLQuery | MySQLQuery[]
