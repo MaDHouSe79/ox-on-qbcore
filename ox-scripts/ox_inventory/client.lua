@@ -3,6 +3,7 @@ if not lib then return end
 require 'modules.bridge.client'
 require 'modules.interface.client'
 
+require 'modules.mods.trunk.client'
 require 'modules.mods.cellphone.client'
 require 'modules.mods.parkmeter.client'
 

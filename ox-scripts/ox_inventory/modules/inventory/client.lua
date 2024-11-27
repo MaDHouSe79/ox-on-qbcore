@@ -33,60 +33,7 @@ function Inventory.OpenBinbag(entity)
 end
 
 local Utils = require 'modules.utils.client'
-local Vehicles = lib.load('data.vehicles')
-local backDoorIds = { 2, 3 }
 
-function Inventory.CanAccessTrunk(entity)
-    if cache.vehicle or not NetworkGetEntityIsNetworked(entity) then return end
-
-	local vehicleHash = GetEntityModel(entity)
-    local vehicleClass = GetVehicleClass(entity)
-    local checkVehicle = Vehicles.Storage[vehicleHash]
-
-    if (checkVehicle == 0 or checkVehicle == 1) or (not Vehicles.trunk[vehicleClass] and not Vehicles.trunk.models[vehicleHash]) then return end
-
-    ---@type number | number[]
-    local doorId = checkVehicle and 4 or 5
-
-    if not Vehicles.trunk.boneIndex?[vehicleHash] and not GetIsDoorValid(entity, doorId --[[@as number]]) then
-        if vehicleClass ~= 11 and (doorId ~= 5 or GetEntityBoneIndexByName(entity, 'boot') ~= -1 or not GetIsDoorValid(entity, 2)) then
-            return
-        end
-
-        if vehicleClass ~= 11 then
-            doorId = backDoorIds
-        end
-    end
-
-    local min, max = GetModelDimensions(vehicleHash)
-    local offset = (max - min) * (not checkVehicle and vec3(0.5, 0, 0.5) or vec3(0.5, 1, 0.5)) + min
-    offset = GetOffsetFromEntityInWorldCoords(entity, offset.x, offset.y, offset.z)
-
-    if #(GetEntityCoords(cache.ped) - offset) < 1.5 then
-        return doorId
-    end
-end
-
-function Inventory.OpenTrunk(entity)
-    ---@type number | number[] | nil
-    local door = Inventory.CanAccessTrunk(entity)
-
-    if not door then return end
-
-    local coords = GetEntityCoords(entity)
-
-    TaskTurnPedToFaceCoord(cache.ped, coords.x, coords.y, coords.z, 0)
-
-    if not client.openInventory('trunk', { netid = NetworkGetNetworkIdFromEntity(entity), entityid = entity, door = door }) then return end
-
-    if type(door) == 'table' then
-        for i = 1, #door do
-            SetVehicleDoorOpen(entity, door[i], false, false)
-        end
-    else
-        SetVehicleDoorOpen(entity, door --[[@as number]], false, false)
-    end
-end
 
 if shared.target then
 
@@ -104,22 +51,11 @@ if shared.target then
         distance = 2
 	})
 
-    exports.ox_target:addGlobalVehicle({
-        icon = 'fas fa-truck-ramp-box',
-        label = locale('open_label', locale('storage')),
-        distance = 1.5,
-        canInteract = Inventory.CanAccessTrunk,
-        onSelect = function(data)
-            return Inventory.OpenTrunk(data.entity)
-        end
-    })
 else
 	local dumpsters = table.create(0, #Inventory.Dumpsters)
-
 	for i = 1, #Inventory.Dumpsters do
 		dumpsters[Inventory.Dumpsters[i]] = true
 	end
-
 	Inventory.Dumpsters = dumpsters
 end
 
