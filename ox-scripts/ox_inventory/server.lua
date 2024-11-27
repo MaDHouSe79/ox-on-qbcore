@@ -4,7 +4,7 @@ require 'modules.bridge.server'
 require 'modules.crafting.server'
 require 'modules.shops.server'
 require 'modules.pefcl.server'
-require 'mods.parkmeter.server'
+require 'modules.mods.parkmeter.server'
 
 if GetConvar('inventory:versioncheck', 'true') == 'true' then
 	lib.versionCheck('overextended/ox_inventory')
