@@ -13,11 +13,18 @@ function Parkmeter.Functions.PayFee(entity)
 end
 
 function Parkmeter.Functions.Lockpick(entity)
-    local success = exports["qb-minigames"]:Skillbar('easy', '1234')
-    if success then 
-        Parkmeter.Robbed[entity] = true
-        TriggerServerEvent('ox_inventory:steal', GetEntityCoords(entity)) 
-    end
+	local success = lib.skillCheck({'easy'}, {'1', '2', '3', '4'})
+	if success then
+		local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
+		if not netId then
+			local coords = GetEntityCoords(entity)
+			entity = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, GetEntityModel(entity), true, true, true)
+			netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
+		end
+		if netId then
+			client.openInventory('parkmeter', 'parkmeter-'..netId)
+		end
+	end
 end
 
 function Parkmeter.Functions.HasLockpick()

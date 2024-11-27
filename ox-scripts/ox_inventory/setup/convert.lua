@@ -5,19 +5,6 @@ local function Print(arg)
 	print(('^3=================================================================\n^0%s\n^3=================================================================^0'):format(arg))
 end
 
-local function SplitStr(str, delimiter)
-	local result = {}
-	local from = 1
-	local delim_from, delim_to = string.find(str, delimiter, from)
-	while delim_from do
-		result[#result + 1] = string.sub(str, from, delim_from - 1)
-		from = delim_to + 1
-		delim_from, delim_to = string.find(str, delimiter, from)
-	end
-	result[#result + 1] = string.sub(str, from)
-	return result
-end 
-
 local function Upgrade()
 	if started then
 		return warn('Data is already being converted, please wait..')
@@ -49,7 +36,7 @@ local function Upgrade()
 
 		for owner, v in pairs(vehicles) do
 			for plate, v2 in pairs(v) do
-				count = count + 1
+				count += 1
 				parameters[count] = {
 					v2.trunk,
 					v2.glovebox,
@@ -104,7 +91,7 @@ local function ConvertESX()
 	Print(('Converting %s user inventories to new data format'):format(total))
 
 	for i = 1, total do
-		count = count + 1
+		count += 1
 		local inventory, slot = {}, 0
 		local items = users[i].inventory and json.decode(users[i].inventory) or {}
 		local accounts = users[i].accounts and json.decode(users[i].accounts) or {}
@@ -113,7 +100,7 @@ local function ConvertESX()
 		for k, v in pairs(accounts) do
 			if type(v) == 'table' then break end
 			if server.accounts[k] and Items(k) and v > 0 then
-				slot = slot + 1
+				slot += 1
 				inventory[slot] = {slot=slot, name=k, count=v}
 			end
 		end
@@ -121,7 +108,7 @@ local function ConvertESX()
 		for k in pairs(loadout) do
 			local item = Items(k)
 			if item then
-				slot = slot + 1
+				slot += 1
 				inventory[slot] = {slot=slot, name=k, count=1, metadata = {durability=100}}
 				if item.ammoname then
 					inventory[slot].metadata.ammo = 0
@@ -134,7 +121,7 @@ local function ConvertESX()
 		for k, v in pairs(items) do
 			if type(v) == 'table' then break end
 			if Items(k) and v > 0 then
-				slot = slot + 1
+				slot += 1
 				inventory[slot] = {slot=slot, name=k, count=v}
 			end
 		end
@@ -164,14 +151,14 @@ local function Convert_Old_ESX_Property()
 	Print(('Converting %s user property inventories to new data format'):format(total))
 
 	for i = 1, #inventories do
-		count = count + 1
+		count += 1
 		local inventory, slot = {}, 0
 
-		local addoninventory = MySQL.query.await('SELECT name, count FROM addon_inventory_items WHERE owner = ? AND inventory_name = "property"', {inventories[i].owner})
+		local addoninventory = MySQL.query.await('SELECT name,count FROM addon_inventory_items WHERE owner = ? AND inventory_name = "property"', {inventories[i].owner})
 
 		for k,v in pairs(addoninventory) do
 			if Items(v.name) and v.count > 0 then
-				slot = slot + 1
+				slot += 1
 				inventory[slot] = {slot=slot, name=v.name, count=v.count}
 			end
 		end
@@ -180,7 +167,7 @@ local function Convert_Old_ESX_Property()
 
 		for k,v in pairs(addonaccount) do
 			if v.money > 0 then
-				slot = slot + 1
+				slot += 1
 				inventory[slot] = {slot=slot, name="black_money", count=v.money}
 			end
 		end
@@ -193,7 +180,7 @@ local function Convert_Old_ESX_Property()
 				for b = 1, #obj['weapons'] do
 					local item = Items(obj['weapons'][b].name)
 					if item then
-						slot = slot + 1
+						slot += 1
 						inventory[slot] = {slot=slot, name=obj['weapons'][b].name, count=1, metadata = {durability=100}}
 						if item.ammoname then
 							inventory[slot].metadata.ammo = obj['weapons'][b].ammo
@@ -206,7 +193,7 @@ local function Convert_Old_ESX_Property()
 		end
 		parameters[count] = {inventories[i].owner,"property"..inventories[i].owner,json.encode(inventory,{indent=false})}
 	end
-	MySQL.prepare.await('INSERT INTO ox_inventory (owner, name, data) VALUES (?,?,?)', parameters)
+	MySQL.prepare.await('INSERT INTO ox_inventory (owner,name,data) VALUES (?,?,?)', parameters)
 	Print('Successfully converted user property inventories')
 	started = false
 end
@@ -429,5 +416,5 @@ return {
 	linden = Upgrade,
 	esx = ConvertESX,
 	esxproperty = Convert_Old_ESX_Property,
-	qb = ConvertQB
+	qb = ConvertQB,
 }

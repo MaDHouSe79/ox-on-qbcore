@@ -14,11 +14,10 @@ end
 
 shared = {
     resource = GetCurrentResourceName(),
-    framework = 'qb',
-    playerslots = 50,
-    playerweight = 30000,
-    target = true,
-    lockpickItem = "lockpick",
+    framework = GetConvar('inventory:framework', 'qb'),
+    playerslots = GetConvarInt('inventory:slots', 50),
+    playerweight = GetConvarInt('inventory:weight', 30000),
+    target = GetConvarInt('inventory:target', 0) == 1,
     police = json.decode(GetConvar('inventory:police', '["police", "sheriff"]')),
 }
 
@@ -47,7 +46,7 @@ if IsDuplicityVersion() then
         randomloot = GetConvarInt('inventory:randomloot', 1) == 1,
         evidencegrade = GetConvarInt('inventory:evidencegrade', 2),
         trimplate = GetConvarInt('inventory:trimplate', 1) == 1,
-
+        
         vehicleloot = json.decode(GetConvar('inventory:vehicleloot', [[
 			[
 				["sprunk", 1, 1],
@@ -59,13 +58,13 @@ if IsDuplicityVersion() then
 				["bandage", 1, 1]
 			]
 		]])),
-        
+
         dumpsterloot = json.decode(GetConvar('inventory:dumpsterloot', [[
 			[
 				["mustard", 1, 1],
 				["garbage", 1, 3],
 				["money", 1, 10],
-				["burger", 1, 1],
+				["burger", 1, 1]
 			]
 		]])),
 
@@ -83,9 +82,15 @@ if IsDuplicityVersion() then
 				["money", 1, 10],
 			]
 		]])),
+
+        parkmeterloot = json.decode(GetConvar('inventory:parkmeterloot', [[
+			[
+				["money", 1, 10],
+			]
+		]])),
     }
 
-    local accounts = json.decode(GetConvar('inventory:accounts', '["money", "black_money", "crypto"]'))
+    local accounts = json.decode(GetConvar('inventory:accounts', '["money"]'))
     server.accounts = table.create(0, #accounts)
 
     for i = 1, #accounts do
@@ -200,7 +205,8 @@ if not success then
 end
 
 if not LoadResourceFile(shared.resource, 'web/build/index.html') then
-    return spamError('UI has not been built, refer to the documentation or download a release build.\n	^3https://overextended.dev/ox_inventory^0')
+    return spamError(
+        'UI has not been built, refer to the documentation or download a release build.\n	^3https://overextended.dev/ox_inventory^0')
 end
 
 -- No we're not going to support qtarget any longer.

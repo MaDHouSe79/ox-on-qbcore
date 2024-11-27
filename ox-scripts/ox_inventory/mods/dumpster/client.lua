@@ -2,6 +2,7 @@ if not lib then return end
 
 local Dumpster = {}
 Dumpster.Functions = {}
+Dumpster.Locations = {}
 
 function Dumpster.Functions.Open(entity)
     local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
@@ -23,6 +24,12 @@ if shared.target then
         onSelect = function(data) return Dumpster.Functions.Open(data.entity) end,
         distance = 2
 	})
+else
+	local dumpsters = table.create(0, #Dumpster.Locations)
+	for i = 1, #Dumpster.Locations do
+		dumpsters[Dumpster.Locations[i]] = true
+	end
+	Dumpster.Locations = dumpsters
 end
 
 return Dumpster

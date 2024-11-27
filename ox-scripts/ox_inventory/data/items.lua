@@ -68,26 +68,6 @@ return {
 		label = 'Dirty Money',
 	},
 
-	['crypto'] = {
-		label = 'Crypto',
-	},
-	
-	['handcuffs'] = {
-		label = 'Handcuffs',
-	},
-	
-	['handcuffkey'] = {
-		label = 'Handcuff Key',
-	},
-
-	['gatekey'] = {
-		label = 'Gate Key',
-	},
-
-	['rcbandito'] = {
-		label = 'RC Bandito',
-	},
-	
 	['burger'] = {
 		label = 'Burger',
 		weight = 220,
@@ -100,30 +80,6 @@ return {
 		},
 	},
 
-	['trash_burger'] = {
-		label = 'Trash Burger',
-		weight = 220,
-		client = {
-			status = { hunger = 100000 },
-			anim = 'eating',
-			prop = 'burger',
-			usetime = 2500,
-			notification = 'You ate a delicious trash burger'
-		},
-	},
-
-	['trash_bread'] = {
-		label = 'Trash Bread',
-		weight = 220,
-		client = {
-			status = { hunger = 100000 },
-			anim = 'eating',
-			prop = 'burger',
-			usetime = 2500,
-			notification = 'You ate a delicious trash bread'
-		},
-	},
-	
 	['sprunk'] = {
 		label = 'Sprunk',
 		weight = 350,
@@ -143,13 +99,6 @@ return {
 		client = {
 			anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
 			usetime = 1500
-		}
-	},
-
-	['bank_card'] = {
-		label = 'Bank Card',
-		client = {
-			image = 'bank_card.png'
 		}
 	},
 
@@ -273,6 +222,4 @@ return {
 		label = 'Scrap Metal',
 		weight = 80,
 	},
-
-
 }

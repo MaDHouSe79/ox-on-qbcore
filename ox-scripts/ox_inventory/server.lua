@@ -4,8 +4,6 @@ require 'modules.bridge.server'
 require 'modules.crafting.server'
 require 'modules.shops.server'
 require 'modules.pefcl.server'
-
--- Mods for ox_inventory
 require 'mods.parkmeter.server'
 
 if GetConvar('inventory:versioncheck', 'true') == 'true' then
@@ -71,13 +69,14 @@ exports('setPlayerInventory', server.setPlayerInventory)
 AddEventHandler('ox_inventory:setPlayerInventory', server.setPlayerInventory)
 
 ---@param playerPed number
----@param coordinates vector3|vector3[]
----@param distance? number
----@return vector3|false
-local function getClosestStashCoords(playerPed, coordinates, distance)
+---@param stash OxInventory
+---@return vector3?
+local function getClosestStashCoords(playerPed, stash)
 	local playerCoords = GetEntityCoords(playerPed)
+	local distance = stash.distance or 10
+    local coordinates = stash.coords
 
-	if not distance then distance = 10 end
+    if not coordinates then return end
 
 	if type(coordinates) == 'table' then
 		for i = 1, #coordinates do
@@ -88,12 +87,12 @@ local function getClosestStashCoords(playerPed, coordinates, distance)
 			end
 		end
 
-		return false
+		return
 	end
 
-	return #(coordinates - playerCoords) < distance and coordinates
+	return #(coordinates - playerCoords) < distance and coordinates or nil
 end
-exports('getClosestStashCoords', getClosestStashCoords)
+
 ---@param source number
 ---@param invType string
 ---@param data? string|number|table
@@ -170,18 +169,6 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 			if ignoreSecurityChecks or server.hasGroup(left, shared.police) then
 				right = Inventory(('evidence-%s'):format(data))
 			end
-		elseif invType == 'dumpster' then
-			---@cast data string
-			right = Inventory(data)
-
-			if not right then
-				local netid = tonumber(data:sub(9))
-				-- dumpsters do not work with entity lockdown. need to rewrite, but having to do
-				-- distance checks to some ~7000 dumpsters and freeze the entities isn't ideal
-				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
-					right = Inventory.Create(data, locale('dumpster'), invType, 15, 0, 100000, false)
-				end
-			end
 
 		elseif invType == 'apartment' then
 			---@cast data string
@@ -196,6 +183,44 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 				right = Inventory.Create(data, data:gsub("^%l", string.upper), invType, 15, 0, 100000, false)
 			end
 			
+		elseif invType == 'dumpster' then
+			right = Inventory(data)
+			if not right then
+				local netid = tonumber(data:sub(9))
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, locale('dumpster'), invType, 15, 0, 100000, false)
+				end
+			end
+
+		elseif invType == 'binbag' then
+			right = Inventory(data)
+			if not right then
+				local netid = tonumber(data:sub(9))
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, locale('binbag'), invType, 15, 0, 100000, false)
+				end
+			end
+
+		elseif invType == 'cellphone' then
+			right = Inventory(data)
+			if not right then
+				local netid = tonumber(data:sub(9))
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, locale('cellphone'), invType, 15, 0, 100000, false)
+				end
+			end
+
+		elseif invType == 'parkmeter' then
+			right = Inventory(data)
+			if not right then
+				local netid = tonumber(data:sub(9))
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, locale('parkmeter'), invType, 15, 0, 100000, false)
+				end
+			end
+
+
+
 		elseif invType == 'container' then
 			left.containerSlot = data --[[@as number]]
 			data = left.items[data]
@@ -233,7 +258,7 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 		end
 
 		if not ignoreSecurityChecks and right.coords then
-			closestCoords = getClosestStashCoords(playerPed, right.coords)
+			closestCoords = getClosestStashCoords(playerPed, right)
 
 			if not closestCoords then return end
 		end
@@ -282,6 +307,7 @@ end)
 ---@param data string|number|table
 function server.forceOpenInventory(playerId, invType, data)
 	local left, right = openInventory(playerId, invType, data, true)
+
 	if left and right then
 		TriggerClientEvent('ox_inventory:forceOpenInventory', playerId, left, right)
 		return right.id
@@ -513,7 +539,7 @@ RegisterCommand('convertinventory', function(source, args)
 	local convert = arg and conversionScript[arg]
 
 	if not convert then
-		return warn('Invalid conversion argument. Valid options: esx, esxproperty, qb')
+		return warn('Invalid conversion argument. Valid options: esx, esxproperty')
 	end
 
 	CreateThread(convert)
@@ -670,19 +696,4 @@ lib.addCommand('viewinv', {
 	restricted = 'group.admin',
 }, function(source, args)
 	Inventory.InspectInventory(source, tonumber(args.invId) or args.invId)
-end)
-
-
-AddEventHandler('onResourceStart', function(resource)
-    if resource == GetCurrentResourceName() then
-		MySQL.Async.fetchAll("SELECT * FROM players", function(rs)
-			for k, v in pairs(rs) do
-				local list = json.decode(v.money)
-				if not list['black_money'] then
-					list['black_money'] = 0
-					MySQL.update.await('UPDATE players SET money = ? WHERE citizenid = ?', {json.encode(list), v.citizenid})
-				end
-			end
-		end)        
-    end
 end)

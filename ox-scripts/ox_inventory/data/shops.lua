@@ -110,13 +110,13 @@ return {
 		blip = {
 			id = 110, colour = 84, scale = 0.8
 		}, inventory = {
-			{ name = 'ammo-9', price = 0, },
-			{ name = 'ammo-rifle', price = 0, },
-			{ name = 'WEAPON_FLASHLIGHT', price = 0 },
-			{ name = 'WEAPON_NIGHTSTICK', price = 0 },
-			{ name = 'WEAPON_PISTOL', price = 0, metadata = { registered = true, serial = 'POL' }, license = 'weapon' },
+			{ name = 'ammo-9', price = 5, },
+			{ name = 'ammo-rifle', price = 5, },
+			{ name = 'WEAPON_FLASHLIGHT', price = 200 },
+			{ name = 'WEAPON_NIGHTSTICK', price = 100 },
+			{ name = 'WEAPON_PISTOL', price = 500, metadata = { registered = true, serial = 'POL' }, license = 'weapon' },
 			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
-			{ name = 'WEAPON_STUNGUN', price = 0, metadata = { registered = true, serial = 'POL'} }
+			{ name = 'WEAPON_STUNGUN', price = 500, metadata = { registered = true, serial = 'POL'} }
 		}, locations = {
 			vec3(451.51, -979.44, 30.68)
 		}, targets = {

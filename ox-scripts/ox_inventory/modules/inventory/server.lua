@@ -86,7 +86,8 @@ for _, stash in pairs(lib.load('data.stashes') or {}) do
 		slots = stash.slots,
 		maxWeight = stash.weight,
 		groups = stash.groups or stash.jobs,
-		coords = shared.target and stash.target?.loc or stash.coords
+		coords = shared.target and stash.target?.loc or stash.coords,
+        distance = stash.distance or 10
 	}
 end
 
@@ -195,10 +196,8 @@ local function loadInventoryData(data, player, ignoreSecurityChecks)
 
 			if not inventory then
 				inventory = Inventory.Create(stash.name, stash.label or stash.name, 'stash', stash.slots, 0, stash.maxWeight, owner, nil, stash.groups)
-
-                if stash.coords then
-					inventory.coords = stash.coords
-				end
+                inventory.coords = stash.coords
+                inventory.distance = stash.distance
 			end
 		end
 	end
@@ -585,7 +584,7 @@ function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, i
         dbId = dbId
 	}
 
-	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' or invType == 'binbag' or invType == 'cellphone' then
+	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' then
 		self.datastore = true
 	else
 		self.changed = false
@@ -774,10 +773,6 @@ local function generateItems(inv, invType, items)
 	if items == nil then
 		if invType == 'dumpster' then
 			items = randomLoot(server.dumpsterloot)
-		elseif invType == 'binbag' then
-			items = randomLoot(server.binbagloot)
-		elseif invType == 'cellphone' then
-			items = randomLoot(server.cellphoneloot)
 		elseif invType == 'vehicle' then
 			items = randomLoot(server.vehicleloot)
 		end
@@ -822,22 +817,10 @@ function Inventory.Load(id, invType, owner)
         else
             result = result[invType]
         end
-		
 	elseif invType == 'dumpster' then
 		if server.randomloot then
 			return generateItems(id, invType)
 		end
-
-	elseif invType == 'binbag' then
-		if server.randomloot then
-			return generateItems(id, invType)
-		end
-
-	elseif invType == 'cellphone' then
-		if server.randomloot then
-			return generateItems(id, invType)
-		end
-
 	elseif id then
 		result = db.loadStash(owner or '', id)
 	end
@@ -937,11 +920,14 @@ end
 ---@param metadata? table
 function Inventory.SetItem(inv, item, count, metadata)
 	if type(item) ~= 'table' then item = Items(item) end
-	if item and (count ~= nil and count >= 0) then
+
+	if item and count >= 0 then
 		inv = Inventory(inv) --[[@as OxInventory]]
+
 		if inv then
 			inv.changed = true
 			local itemCount = Inventory.GetItem(inv, item.name, metadata, true) --[[@as number]]
+
 			if count > itemCount then
 				count -= itemCount
 				return Inventory.AddItem(inv, item.name, count, metadata)
@@ -2750,6 +2736,5 @@ function Inventory.InspectInventory(playerId, invId)
 end
 
 exports('InspectInventory', Inventory.InspectInventory)
-
 
 return Inventory
