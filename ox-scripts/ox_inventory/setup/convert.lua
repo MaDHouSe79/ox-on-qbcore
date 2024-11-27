@@ -416,5 +416,5 @@ return {
 	linden = Upgrade,
 	esx = ConvertESX,
 	esxproperty = Convert_Old_ESX_Property,
-	qb = ConvertQB,
+	qb = ConvertQB
 }

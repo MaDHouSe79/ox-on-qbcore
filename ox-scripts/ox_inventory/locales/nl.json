@@ -62,7 +62,6 @@
   "shop_nostock": "Item is niet op voorraad",
   "identification": "Geslacht: %s  \nGeboortedatum: %s",
   "search_dumpster": "Vuilnisbak doorzoeken",
-  "search_binbag": "Vuilniszak doorzoeken",
   "open_label": "Open %s",
   "purchased_for": "%s %s gekocht voor %s%s",
   "unable_stack_items": "Je kan deze items niet op elkaar stapelen",
@@ -83,24 +82,8 @@
   "cannot_give": "Niet in staat om %s %s te geven aan het doel",
   "evidence_cannot_take": "Je rang is niet hoog genoeg om van de bewijskluis te pakken",
   "dumpster": "Afvalcontainer",
-  "binbag": "Afvalzak",
   "crafting_item": "%s aan het maken",
   "crafting_bench": "Werkbank",
   "open_crafting_bench": "Open Werkbank",
-  "not_enough_durability": "%s heeft niet genoeg levensduur.",
-  "storage": "Opslag",
-  "apartment": "Apartment",
-  "house": "Huis",
-  "pay_park_fee": "Betalen ($5)",
-  "check_fee": "Betaling controleren (Politie)",
-  "lockpick": "Lockpick",
-  "not_a_cop": "Je bent geen agent!",
-  "parkmeter_not_paid": "Deze meter is niet betaald!",
-  "parkmeter_you_paid": "U heeft parkeergeld betaald!",
-  "parkmeter_is_paid": "Deze parkeerplaats is betaald!",
-  "parkmeter_is_robbed": "Het geld in deze meter is gerooft!",
-  "parkmeter_is_already_robbed": "Deze meter is al leeg geroofd!",
-  "parking_fee_expired": "Parking fee has expired",
-  "cellpgone_already_robbed":"This telephone booth has already been robbed"
-  
+  "not_enough_durability": "%s heeft niet genoeg levensduur."
 }

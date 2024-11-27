@@ -2,31 +2,9 @@ if not lib then return end
 
 local Inventory = {}
 
-Inventory.Dumpsters = {1437508529, 218085040, 666561306, -58485588, -206690185, 1511880420, 682791951}
-Inventory.Binbags = {1388415578, -1998455445, 1627301588, -935625561, -675277761, 628215202, -375613925, 1813879595, 1388308576, -289082718, 1098827230, 897494494, -1681329307, 1138881502, -1895783233, -1734625067, -819563011}
+Inventory.Dumpsters = {218085040, 666561306, -58485588, -206690185, 1511880420, 682791951, 1388415578, -1998455445, 1627301588, -935625561, -675277761, 628215202, -375613925, 1813879595, 1388308576, -289082718, 1098827230, 897494494, -1681329307, 1138881502, -1895783233, -1734625067, -819563011}
 Inventory.Parkmeters = {-1940238623, -544726684, 2108567945, 1447355784}
 Inventory.Cellphones = {-78626473, 295857659, 1158960338, -2103798695, 1511539537, 1281992692}
-
-
-function Inventory.OpenDumpster(entity)
-    local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
-    if not netId then
-        local coords = GetEntityCoords(entity)
-        entity = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, GetEntityModel(entity), true, true, true)
-        netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
-    end
-    if netId then client.openInventory('dumpster', 'dumpster' .. netId) end
-end
-
-function Inventory.OpenBinbag(entity)
-    local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
-    if not netId then
-        local coords = GetEntityCoords(entity)
-        entity = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, GetEntityModel(entity), true, true, true)
-        netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
-    end
-    if netId then client.openInventory('binbag', 'binbag' .. netId) end
-end
 
 function Inventory.PayFee(entity)
     TriggerServerEvent('ox_inventory:payoarkfee', GetEntityCoords(entity))
@@ -35,156 +13,86 @@ end
 
 function Inventory.LockpickParkmeter(entity)
     local success = lib.skillCheck({'easy'}, {'1', '2', '3', '4'})
-    if success then
-        TriggerServerEvent('ox_inventory:parkmeter-robbery', GetEntityCoords(entity))
-    end
+    if success then TriggerServerEvent('ox_inventory:parkmeter-robbery', GetEntityCoords(entity)) end
 end
 
 function Inventory.LockpickCellphone(entity)
     local success = lib.skillCheck({'easy'}, {'1', '2', '3', '4'})
-    if success then
-        TriggerServerEvent('ox_inventory:cellphone-robbery', GetEntityCoords(entity))
-    end
+    if success then TriggerServerEvent('ox_inventory:cellphone-robbery', GetEntityCoords(entity)) end
 end
 
 function Inventory.HasLockpick()
-    local count = exports.ox_inventory:Search('count', shared.lockpickItem)
+    local count = exports.ox_inventory:Search('count', 'lockpick')
     return (count >= 1)
 end
 
-function Inventory.HasJob()
-    if (PlayerData.job == "police" or PlayerData.job.name == "police") then return true end
-    return false
+function Inventory.OpenDumpster(entity)
+	local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
+
+	if not netId then
+		local coords = GetEntityCoords(entity)
+		entity = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, GetEntityModel(entity), true, true, true)
+		netId = entity ~= 0 and NetworkGetNetworkIdFromEntity(entity)
+	end
+
+	if netId then
+		client.openInventory('dumpster', 'dumpster'..netId)
+	end
 end
 
 local Utils = require 'modules.utils.client'
 local Vehicles = lib.load('data.vehicles')
-local backDoorIds = {2, 3}
+local backDoorIds = { 2, 3 }
 
 function Inventory.CanAccessTrunk(entity)
     if cache.vehicle or not NetworkGetEntityIsNetworked(entity) then return end
-    local vehicleHash = GetEntityModel(entity)
+
+	local vehicleHash = GetEntityModel(entity)
     local vehicleClass = GetVehicleClass(entity)
     local checkVehicle = Vehicles.Storage[vehicleHash]
-    if (checkVehicle == 0 or checkVehicle == 1) or (not Vehicles.trunk[vehicleClass] and not Vehicles.trunk.models[vehicleHash]) then
-        return
-    end
+
+    if (checkVehicle == 0 or checkVehicle == 1) or (not Vehicles.trunk[vehicleClass] and not Vehicles.trunk.models[vehicleHash]) then return end
+
+    ---@type number | number[]
     local doorId = checkVehicle and 4 or 5
-    if not Vehicles.trunk.boneIndex[vehicleHash] and not GetIsDoorValid(entity, doorId --[[@as number]] ) then
+
+    if not Vehicles.trunk.boneIndex?[vehicleHash] and not GetIsDoorValid(entity, doorId --[[@as number]]) then
         if vehicleClass ~= 11 and (doorId ~= 5 or GetEntityBoneIndexByName(entity, 'boot') ~= -1 or not GetIsDoorValid(entity, 2)) then
             return
         end
+
         if vehicleClass ~= 11 then
             doorId = backDoorIds
         end
     end
+
     local min, max = GetModelDimensions(vehicleHash)
     local offset = (max - min) * (not checkVehicle and vec3(0.5, 0, 0.5) or vec3(0.5, 1, 0.5)) + min
     offset = GetOffsetFromEntityInWorldCoords(entity, offset.x, offset.y, offset.z)
+
     if #(GetEntityCoords(cache.ped) - offset) < 1.5 then
         return doorId
     end
 end
 
 function Inventory.OpenTrunk(entity)
+    ---@type number | number[] | nil
     local door = Inventory.CanAccessTrunk(entity)
+
     if not door then return end
+
     local coords = GetEntityCoords(entity)
+
     TaskTurnPedToFaceCoord(cache.ped, coords.x, coords.y, coords.z, 0)
-    if not client.openInventory('trunk', {netid = NetworkGetNetworkIdFromEntity(entity), entityid = entity, door = door}) then return end
+
+    if not client.openInventory('trunk', { netid = NetworkGetNetworkIdFromEntity(entity), entityid = entity, door = door }) then return end
+
     if type(door) == 'table' then
         for i = 1, #door do
             SetVehicleDoorOpen(entity, door[i], false, false)
         end
     else
-        SetVehicleDoorOpen(entity, door, false, false)
-    end
-end
-
-if shared.target then
-
-    local parkingTarget = {}
-    if shared.useParkingFee then
-        parkingTarget[#parkingTarget + 1] = {
-            type = "client",
-            icon = "fas fa-parking",
-            label = locale('pay_park_fee'),
-            onSelect = function(data) return Inventory.PayFee(data.entity) end,
-            distance = 2
-        }
-    end
-
-    if shared.useLockpickParking then
-        parkingTarget[#parkingTarget + 1] = {
-            type = "client",
-            icon = "fas fa-parking",
-            label = locale("lockpick"),
-            canInteract = Inventory.HasLockpick,
-            onSelect = function(data) return Inventory.LockpickParkmeter(data.entity) end,
-            distance = 2
-        }
-    end
-    exports.ox_target:addModel(Inventory.Parkmeters, parkingTarget)
-
-    if shared.useLockpickCellphone then
-        exports.ox_target:addModel(Inventory.Cellphones, {
-            icon = 'fas fa-phone',
-            label = locale('lockpick'),
-            canInteract = Inventory.HasLockpick,
-            onSelect = function(data) return Inventory.LockpickCellphone(data.entity) end,
-            distance = 2
-        })
-    end
-
-    exports.ox_target:addModel(Inventory.Binbags, {
-        icon = 'fa-trash',
-        label = locale('search_binbag'),
-        onSelect = function(data) return Inventory.OpenBinbag(data.entity) end,
-        distance = 2
-    })
-
-    exports.ox_target:addModel(Inventory.Dumpsters, {
-        icon = 'fas fa-dumpster',
-        label = locale('search_dumpster'),
-        onSelect = function(data) return Inventory.OpenDumpster(data.entity) end,
-        distance = 2
-    })
-
-    exports.ox_target:addGlobalVehicle({
-        icon = 'fas fa-truck-ramp-box',
-        label = locale('open_label', locale('storage')),
-        distance = 1.5,
-        canInteract = Inventory.CanAccessTrunk,
-        onSelect = function(data) return Inventory.OpenTrunk(data.entity) end
-    })
-	
-else
-    local binbags = table.create(0, #Inventory.Binbags)
-    for i = 1, #Inventory.Binbags do
-        binbags[Inventory.Binbags[i]] = true
-    end
-    Inventory.Binbags = binbags
-
-    local dumpsters = table.create(0, #Inventory.Dumpsters)
-    for i = 1, #Inventory.Dumpsters do
-        dumpsters[Inventory.Dumpsters[i]] = true
-    end
-    Inventory.Dumpsters = dumpsters
-
-    if shared.useLockpickParking then
-        local parkmeters = table.create(0, #Inventory.Parkmeters)
-        for i = 1, #Inventory.Parkmeters do
-            parkmeters[Inventory.Parkmeters[i]] = true
-        end
-        Inventory.Parkmeters = parkmeters
-    end
-
-    if shared.useLockpickCellphone then
-        local cellphones = table.create(0, #Inventory.Cellphones)
-        for i = 1, #Inventory.Cellphones do
-            cellphones[Inventory.Cellphones[i]] = true
-        end
-        Inventory.Cellphones = cellphones
+        SetVehicleDoorOpen(entity, door --[[@as number]], false, false)
     end
 end
 
@@ -192,6 +100,59 @@ RegisterNetEvent('ox_inventory:mods:notify', function(title, description, type)
     lib.notify({title = title, description = description, type = type})
 end)
 
+if shared.target then
+	exports.ox_target:addModel(Inventory.Dumpsters, {
+        icon = 'fas fa-dumpster',
+        label = locale('search_dumpster'),
+        onSelect = function(data) return Inventory.OpenDumpster(data.entity) end,
+        distance = 2
+	})
+
+    exports.ox_target:addGlobalVehicle({
+        icon = 'fas fa-truck-ramp-box',
+        label = locale('open_label', locale('storage')),
+        distance = 1.5,
+        canInteract = Inventory.CanAccessTrunk,
+        onSelect = function(data)
+            return Inventory.OpenTrunk(data.entity)
+        end
+    })
+
+	exports.ox_target:addModel(Inventory.Parkmeters, {
+		{
+			type = "client",
+			icon = "fas fa-parking",
+			label = locale('pay_park_fee'),
+			onSelect = function(data) return Inventory.PayFee(data.entity) end,
+			distance = 2
+		}, {
+			type = "client",
+			icon = "fas fa-parking",
+			label = locale("lockpick"),
+			canInteract = Inventory.HasLockpick,
+			onSelect = function(data) return Inventory.LockpickParkmeter(data.entity) end,
+			distance = 2
+		}
+	})
+
+	exports.ox_target:addModel(Inventory.Cellphones, {
+		icon = 'fas fa-phone',
+		label = locale('lockpick'),
+		canInteract = Inventory.HasLockpick,
+		onSelect = function(data) return Inventory.LockpickCellphone(data.entity) end,
+		distance = 2
+	})
+
+
+else
+	local dumpsters = table.create(0, #Inventory.Dumpsters)
+
+	for i = 1, #Inventory.Dumpsters do
+		dumpsters[Inventory.Dumpsters[i]] = true
+	end
+
+	Inventory.Dumpsters = dumpsters
+end
 
 ---@param search 'slots' | 1 | 'count' | 2
 ---@param item table | string
@@ -223,7 +184,7 @@ function Inventory.Search(search, item, metadata)
 					if not metadata or table.contains(v.metadata, metadata) then
 						if search == 1 then returnData[item][#returnData[item]+1] = PlayerData.inventory[v.slot]
 						elseif search == 2 then
-							returnData[item] = returnData[item] + v.count
+							returnData[item] += v.count
 						end
 					end
 				end

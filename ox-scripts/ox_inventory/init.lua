@@ -14,19 +14,15 @@ end
 
 shared = {
     resource = GetCurrentResourceName(),
-    framework = 'qb',
-    playerslots = 50,
-    playerweight = 30000,
-    target = true,
-    useParkingFee = true,
-    useLockpickParking = true,
-    useLockpickCellphone = true,
-    lockpickItem = "lockpick",
-    police = json.decode('["police", "sheriff"]'),
+    framework = GetConvar('inventory:framework', 'qb'),
+    playerslots = GetConvarInt('inventory:slots', 50),
+    playerweight = GetConvarInt('inventory:weight', 30000),
+    target = GetConvarInt('inventory:target', 0) == 1,
+    police = json.decode(GetConvar('inventory:police', '["police", "sheriff"]')),
 }
 
-shared.dropslots = shared.playerslots
-shared.dropweight = shared.playerweight
+shared.dropslots = GetConvarInt('inventory:dropslots', shared.playerslots)
+shared.dropweight = GetConvarInt('inventory:dropslotcount', shared.playerweight)
 
 do
     if type(shared.police) == 'string' then
@@ -51,38 +47,27 @@ if IsDuplicityVersion() then
         evidencegrade = GetConvarInt('inventory:evidencegrade', 2),
         trimplate = GetConvarInt('inventory:trimplate', 1) == 1,
         vehicleloot = json.decode(GetConvar('inventory:vehicleloot', [[
-            [
-                ["sprunk", 1, 1],
-                ["water", 1, 1],
-                ["garbage", 1, 2, 50],
-                ["panties", 1, 1, 5],
-                ["money", 1, 50],
-                ["money", 200, 400, 5],
-                ["bandage", 1, 1]
-            ]
-        ]])),
-
+			[
+				["sprunk", 1, 1],
+				["water", 1, 1],
+				["garbage", 1, 2, 50],
+				["panties", 1, 1, 5],
+				["money", 1, 50],
+				["money", 200, 400, 5],
+				["bandage", 1, 1]
+			]
+		]])),
         dumpsterloot = json.decode(GetConvar('inventory:dumpsterloot', [[
-            [
-                ["mustard", 1, 1],
-                ["garbage", 1, 3],
-                ["money", 1, 10],
-                ["burger", 1, 1]
-            ]
-        ]])),
-
-        binbagloot = json.decode(GetConvar('inventory:binbagloot', [[
-            [
-                ["mustard", 1, 1],
-                ["garbage", 1, 3],
-                ["money", 1, 10],
-                ["burger", 1, 1]
-            ]
-        ]])),
-
+			[
+				["mustard", 1, 1],
+				["garbage", 1, 3],
+				["money", 1, 10],
+				["burger", 1, 1]
+			]
+		]])),
     }
 
-    local accounts = json.decode(GetConvar('inventory:accounts', '["money"]'))
+    local accounts = json.decode(GetConvar('inventory:accounts', '["money", "black_money", "crypto"]'))
     server.accounts = table.create(0, #accounts)
 
     for i = 1, #accounts do

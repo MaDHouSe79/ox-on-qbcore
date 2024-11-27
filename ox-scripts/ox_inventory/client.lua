@@ -151,7 +151,7 @@ function client.openInventory(inv, data)
 		-- end
 	end
 
-	if inv == 'dumpster' or inv == 'binbag' and cache.vehicle then
+	if inv == 'dumpster' and cache.vehicle then
 		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
 	end
 
@@ -189,9 +189,6 @@ function client.openInventory(inv, data)
         end
 
         left, right, accessError = lib.callback.await('ox_inventory:openShop', 200, data)
-
-
-		
     elseif inv == 'crafting' then
         if cache.vehicle then
             return lib.notify({ id = 'cannot_perform', type = 'error', description = locale('cannot_perform') })
@@ -820,18 +817,6 @@ local function registerCommands()
 
 				if Inventory.Dumpsters[model] then
 					return Inventory.OpenDumpster(entity)
-				end
-
-				if Inventory.Binbags[model] then
-					return Inventory.OpenBinbag(entity)
-				end
-
-				if Inventory.Cellphones[model] then
-					return Inventory.LockpickCellphone(entity)
-				end
-
-				if Inventory.Parkmeters[model] then
-					return Inventory.LockpickParkmeter(entity)
 				end
 			end
 

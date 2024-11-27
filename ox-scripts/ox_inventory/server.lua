@@ -168,38 +168,19 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 			if ignoreSecurityChecks or server.hasGroup(left, shared.police) then
 				right = Inventory(('evidence-%s'):format(data))
 			end
-
-		elseif invType == 'apartment' then
-			right = Inventory(data)
-			if not right then
-				right = Inventory.Create(data, data:gsub("^%l", string.upper), invType, 15, 0, 100000, false)
-			end
-
-		elseif invType == 'house' then
-			right = Inventory(data)
-			if not right then
-				right = Inventory.Create(data, data:gsub("^%l", string.upper), invType, 15, 0, 100000, false)
-			end
-
-
 		elseif invType == 'dumpster' then
+			---@cast data string
 			right = Inventory(data)
+
 			if not right then
 				local netid = tonumber(data:sub(9))
+
+				-- dumpsters do not work with entity lockdown. need to rewrite, but having to do
+				-- distance checks to some ~7000 dumpsters and freeze the entities isn't ideal
 				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
 					right = Inventory.Create(data, locale('dumpster'), invType, 15, 0, 100000, false)
 				end
 			end
-
-		elseif invType == 'binbag' then
-			right = Inventory(data)
-			if not right then
-				local netid = tonumber(data:sub(9))
-				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
-					right = Inventory.Create(data, locale('binbag'), invType, 15, 0, 100000, false)
-				end
-			end
-
 		elseif invType == 'container' then
 			left.containerSlot = data --[[@as number]]
 			data = left.items[data]
@@ -502,9 +483,11 @@ end)
 
 local function conversionScript()
 	shared.ready = false
+
 	local file = 'setup/convert.lua'
 	local import = LoadResourceFile(shared.resource, file)
 	local func = load(import, ('@@%s/%s'):format(shared.resource, file)) --[[@as function]]
+
 	conversionScript = func()
 end
 
@@ -512,8 +495,13 @@ RegisterCommand('convertinventory', function(source, args)
 	if source ~= 0 then return warn('This command can only be executed with the server console.') end
 	if type(conversionScript) == 'function' then conversionScript() end
 	local arg = args[1]
+
 	local convert = arg and conversionScript[arg]
-	if not convert then return warn('Invalid conversion argument. Valid options: esx, esxproperty, qbx, qb') end
+
+	if not convert then
+		return warn('Invalid conversion argument. Valid options: esx, esxproperty')
+	end
+
 	CreateThread(convert)
 end, true)
 
@@ -529,14 +517,18 @@ lib.addCommand({'additem', 'giveitem'}, {
 	restricted = 'group.admin',
 }, function(source, args)
 	local item = Items(args.item)
+
 	if item then
 		local inventory = Inventory(args.target) --[[@as OxInventory]]
 		local count = args.count or 1
 		local success, response = Inventory.AddItem(inventory, item.name, count, args.type and { type = tonumber(args.type) or args.type })
+
 		if not success then
 			return Citizen.Trace(('Failed to give %sx %s to player %s (%s)'):format(count, item.name, args.target, response))
 		end
+
 		source = Inventory(source) or { label = 'console', owner = 'console' }
+
 		if server.loglevel > 0 then
 			lib.logger(source.owner, 'admin', ('"%s" gave %sx %s to "%s"'):format(source.label, count, item.name, inventory.label))
 		end

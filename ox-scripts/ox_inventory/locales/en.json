@@ -65,7 +65,6 @@
   "shop_nostock": "Item is out of stock",
   "identification": "Sex: %s  \nDate of birth: %s",
   "search_dumpster": "Search Dumpster",
-  "search_binbag": "Search Binbag",
   "open_label": "Open %s",
   "purchased_for": "Purchased %s %s for %s%s",
   "unable_stack_items": "You're unable to stack these items",
@@ -86,24 +85,9 @@
   "cannot_give": "Unable to give %s %s to the target",
   "evidence_cannot_take": "You are not authorised to withdraw evidence",
   "dumpster": "Dumpster",
-  "binbag": "Binbag",
   "crafting_item": "Crafting %s",
   "crafting_bench": "Crafting Bench",
   "open_crafting_bench": "Open Crafting Bench",
   "not_enough_durability": "%s does not have enough durability",
-  "storage": "Storage",
-  "apartment": "Apartment",
-  "house": "House",
-  "pay_park_fee": "Betalen ($5)",
-  "check_fee": "Betaling controleren (Politie)",
-  "lockpick": "Lockpick",
-  "not_a_cop":"You are not a cop!",
-  "parkmeter_not_paid": "This meter has not been paid for!",
-  "parkmeter_you_paid": "You have paid parking fees!",
-  "parkmeter_is_paid": "This parkingspot has been paid for!",
-  "parkmeter_is_robbed": "The money in this meter has been stolen!",
-  "parkmeter_is_already_robbed": "This meter has already been robbed!",
-  "parking_fee_expired": "Parking fee has expired",
-  "cellpgone_already_robbed": "This telephone booth has already been robbed"
-  
+  "storage": "Storage"
 }
