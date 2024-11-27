@@ -200,24 +200,6 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 				end
 			end
 
-		elseif invType == 'parkmeter' then
-			right = Inventory(data)
-			if not right then
-				local netid = tonumber(data:sub(9))
-				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
-					right = Inventory.Create(data, locale('parkmeter'), invType, 15, 0, 100000, false)
-				end
-			end	
-			
-		elseif invType == 'cellphone' then
-			right = Inventory(data)
-			if not right then
-				local netid = tonumber(data:sub(9))
-				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
-					right = Inventory.Create(data, locale('cellphone'), invType, 15, 0, 100000, false)
-				end
-			end	
-
 		elseif invType == 'container' then
 			left.containerSlot = data --[[@as number]]
 			data = left.items[data]

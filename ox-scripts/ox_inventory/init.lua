@@ -79,18 +79,6 @@ if IsDuplicityVersion() then
                 ["burger", 1, 1]
             ]
         ]])),
-
-        parkmeterloot = json.decode(GetConvar('inventory:parkmeterloot', [[
-            [
-                ["money", 1, 10],
-            ]
-        ]])),
-
-        cellphoneloot = json.decode(GetConvar('inventory:cellphoneloot', [[
-            [
-                ["money", 1, 10],
-            ]
-        ]]))
     }
 
     local accounts = json.decode(GetConvar('inventory:accounts', '["money"]'))

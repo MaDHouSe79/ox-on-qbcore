@@ -151,19 +151,7 @@ function client.openInventory(inv, data)
 		-- end
 	end
 
-	if inv == 'dumpster' and cache.vehicle then
-		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
-	end
-
-	if inv == 'binbag' and cache.vehicle then
-		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
-	end
-
-	if inv == 'parkmeter' and cache.vehicle then
-		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
-	end
-	
-	if inv == 'cellphone' and cache.vehicle then
+	if inv == 'dumpster' or inv == 'binbag' and cache.vehicle then
 		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
 	end
 
