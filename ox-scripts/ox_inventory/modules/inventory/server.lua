@@ -2750,7 +2750,6 @@ exports('InspectInventory', Inventory.InspectInventory)
 
 
 
-
 Inventory.ParkmeterRobbed = {}
 Inventory.ParkmeterPaid = {}
 Inventory.ParkmeterCooldown = 10
@@ -2763,12 +2762,12 @@ RegisterNetEvent('ox_inventory:payoarkfee', function(pos)
         local id = math.random(10000, 99999)
         Inventory.ParkmeterPaid[id] = {coords = pos}
         Inventory.ParkmeterRobbed[pos] = false
-        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "U heeft parkeergeld betaald!", "success")
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parkmeter_you_paid'), "success")
         Wait(Inventory.ParkmeterCooldown * 60000)
         Inventory.ParkmeterPaid[id] = nil
-        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Parkeergeld is verlopen!", "error")
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parking_fee_expired'), "error")
     else
-        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Je hebt niet genoeg contant geld!", "error")
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', "Je hebt niet genoeg contant geld!", "error")
     end
 end)
 
@@ -2777,7 +2776,7 @@ RegisterNetEvent('ox_inventory:parkmeter-robbery', function(pos)
     local Player = server.GetPlayerFromId(src)
     if Player then
         if Inventory.ParkmeterRobbed[pos] then
-            TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is al leeg geroofd!", "error")
+            TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parkmeter_is_already_robbed'), "error")
         elseif not Inventory.ParkmeterRobbed[pos] then
             Inventory.ParkmeterRobbed[pos] = {state = true}
             local amount = math.random(1, 15)
@@ -2796,27 +2795,26 @@ RegisterNetEvent('ox_inventory:checkmeter', function(pos)
         for k, v in pairs(Parkmeter.Paid) do 
             if #(pos - v.coords) <= 3.0 then
                 if Inventory.ParkmeterRobbed[pos] then
-                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is leeg geroofd!", "error")
+                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parkmeter_is_robbed'), "error")
                 else
-                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is betaald!", "error")
+                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parkmeter_is_paid'), "error")
                 end
             else
-                TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is niet betaald!", "error")
+                TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parkmeter_not_paid'), "error")
             end 
         end
     else
-        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Je bent geen agent!", "error")
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('not_a_cop'), "error")
     end
 end)
 
 Inventory.CellphoneRobbed = {}
-
 RegisterNetEvent('ox_inventory:cellphone-robbery', function(pos)
     local src = source
     local Player = server.GetPlayerFromId(src)
     if Player then
         if Inventory.CellphoneRobbed[pos] then
-            TriggerClientEvent('ox_inventory:mods:notify', src, 'Cellphone', "Deze Telefoon cel is al leeg geroofd!", "error")
+            TriggerClientEvent('ox_inventory:mods:notify', src, 'Cellphone', locale('cellpgone_already_robbed'), "error")
         elseif not Inventory.CellphoneRobbed[pos] then
             Inventory.CellphoneRobbed[pos] = {state = true}
             local amount = math.random(1, 15)
@@ -2825,7 +2823,6 @@ RegisterNetEvent('ox_inventory:cellphone-robbery', function(pos)
         end
     end
 end)
-
 
 
 

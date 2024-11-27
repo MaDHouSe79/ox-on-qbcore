@@ -97,7 +97,7 @@ function Inventory.OpenTrunk(entity)
             SetVehicleDoorOpen(entity, door[i], false, false)
         end
     else
-        SetVehicleDoorOpen(entity, door --[[@as number]] , false, false)
+        SetVehicleDoorOpen(entity, door, false, false)
     end
 end
 

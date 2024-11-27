@@ -93,5 +93,14 @@
   "house": "Huis",
   "pay_park_fee": "Betalen ($5)",
   "check_fee": "Betaling controleren (Politie)",
-  "lockpick": "Lockpick"
+  "lockpick": "Lockpick",
+  "not_a_cop": "Je bent geen agent!",
+  "parkmeter_not_paid": "Deze meter is niet betaald!",
+  "parkmeter_you_paid": "U heeft parkeergeld betaald!",
+  "parkmeter_is_paid": "Deze parkeerplaats is betaald!",
+  "parkmeter_is_robbed": "Het geld in deze meter is gerooft!",
+  "parkmeter_is_already_robbed": "Deze meter is al leeg geroofd!",
+  "parking_fee_expired": "Parking fee has expired",
+  "cellpgone_already_robbed":"This telephone booth has already been robbed"
+  
 }

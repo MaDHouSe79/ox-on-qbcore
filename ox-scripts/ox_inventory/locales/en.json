@@ -91,11 +91,19 @@
   "crafting_bench": "Crafting Bench",
   "open_crafting_bench": "Open Crafting Bench",
   "not_enough_durability": "%s does not have enough durability",
-
   "storage": "Storage",
   "apartment": "Apartment",
   "house": "House",
   "pay_park_fee": "Betalen ($5)",
   "check_fee": "Betaling controleren (Politie)",
-  "lockpick": "Lockpick"
+  "lockpick": "Lockpick",
+  "not_a_cop":"You are not a cop!",
+  "parkmeter_not_paid": "This meter has not been paid for!",
+  "parkmeter_you_paid": "You have paid parking fees!",
+  "parkmeter_is_paid": "This parkingspot has been paid for!",
+  "parkmeter_is_robbed": "The money in this meter has been stolen!",
+  "parkmeter_is_already_robbed": "This meter has already been robbed!",
+  "parking_fee_expired": "Parking fee has expired",
+  "cellpgone_already_robbed": "This telephone booth has already been robbed"
+  
 }
