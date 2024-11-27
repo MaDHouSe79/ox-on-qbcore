@@ -839,11 +839,11 @@ local function registerCommands()
 				end
 
 				if Inventory.Cellphones[model] then
-					return Inventory.Lockpick(entity)
+					return Inventory.LockpickCellphone(entity)
 				end
 
 				if Inventory.Parkmeters[model] then
-					return Inventory.Lockpick(entity)
+					return Inventory.LockpickParkmeter(entity)
 				end
 			end
 
