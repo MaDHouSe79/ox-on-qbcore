@@ -1,4 +1,6 @@
-if not lib then return end
+if not lib then
+    return
+end
 
 local Parkmeter = {}
 Parkmeter.Paid = {}
@@ -8,11 +10,17 @@ Parkmeter.Robbed = {}
 RegisterNetEvent('ox_inventory:payoarkfee', function(pos)
     local src = source
     local Player = server.GetPlayerFromId(src)
-    if not Player then return end
-    if not Parkmeter.Robbed[pos] then Parkmeter.Robbed[pos] = false end
+    if not Player then
+        return
+    end
+    if not Parkmeter.Robbed[pos] then
+        Parkmeter.Robbed[pos] = false
+    end
     if exports.ox_inventory:RemoveItem(src, "cash", 5) then
         local id = math.random(10000, 99999)
-        Parkmeter.Paid[id] = {coords = pos}
+        Parkmeter.Paid[id] = {
+            coords = pos
+        }
         Parkmeter.Robbed[pos] = false
         TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "U heeft parkeergeld betaald!", "success")
         Wait(Parkmeter.Cooldown * 60000)
@@ -30,7 +38,9 @@ RegisterNetEvent('ox_inventory:parkmeterrobbery', function(pos)
         if Parkmeter.Robbed[pos] then
             TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is al leeg geroofd!", "error")
         elseif not Parkmeter.Robbed[pos] then
-            Parkmeter.Robbed[pos] = {state = true}
+            Parkmeter.Robbed[pos] = {
+                state = true
+            }
             local amount = math.random(1, 15)
             exports.ox_inventory:AddItem(src, 'black_money', amount)
             if math.random() <= 0.2 then
@@ -44,21 +54,21 @@ RegisterNetEvent('ox_inventory:checkmeter', function(pos)
     local src = source
     local Player = server.GetPlayerFromId(src)
     if Player.PlayerData.job.name == 'police' then
-        for k, v in pairs(Parkmeter.Paid) do 
+        for k, v in pairs(Parkmeter.Paid) do
             if #(pos - v.coords) <= 3.0 then
                 if Parkmeter.Robbed[pos] then
-                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is leeg geroofd!", "error")
+                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is leeg geroofd!",
+                        "error")
                 else
                     TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is betaald!", "error")
                 end
             else
                 TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is niet betaald!", "error")
-            end 
+            end
         end
     else
         TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Je bent geen agent!", "error")
     end
 end)
-
 
 return Parkmeter
