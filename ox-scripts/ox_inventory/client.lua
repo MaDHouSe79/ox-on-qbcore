@@ -3,10 +3,6 @@ if not lib then return end
 require 'modules.bridge.client'
 require 'modules.interface.client'
 
-require 'modules.mods.trunk.client'
-require 'modules.mods.cellphone.client'
-require 'modules.mods.parkmeter.client'
-
 local Utils = require 'modules.utils.client'
 local Weapon = require 'modules.weapon.client'
 local currentWeapon
@@ -163,6 +159,13 @@ function client.openInventory(inv, data)
 		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
 	end
 
+	if inv == 'parkmeter' and cache.vehicle then
+		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
+	end
+	
+	if inv == 'cellphone' and cache.vehicle then
+		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
+	end
 
 	if not canOpenInventory() then
         return lib.notify({ id = 'inventory_player_access', type = 'error', description = locale('inventory_player_access') })
@@ -198,6 +201,9 @@ function client.openInventory(inv, data)
         end
 
         left, right, accessError = lib.callback.await('ox_inventory:openShop', 200, data)
+
+
+		
     elseif inv == 'crafting' then
         if cache.vehicle then
             return lib.notify({ id = 'cannot_perform', type = 'error', description = locale('cannot_perform') })
@@ -830,6 +836,14 @@ local function registerCommands()
 
 				if Inventory.Binbags[model] then
 					return Inventory.OpenBinbag(entity)
+				end
+
+				if Inventory.Cellphones[model] then
+					return Inventory.Lockpick(entity)
+				end
+
+				if Inventory.Parkmeters[model] then
+					return Inventory.Lockpick(entity)
 				end
 			end
 

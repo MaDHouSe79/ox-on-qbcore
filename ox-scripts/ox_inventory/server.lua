@@ -5,11 +5,8 @@ require 'modules.crafting.server'
 require 'modules.shops.server'
 require 'modules.pefcl.server'
 
-require 'modules.mods.cellphone.server'
-require 'modules.mods.parkmeter.server'
-
 if GetConvar('inventory:versioncheck', 'true') == 'true' then
-	--lib.versionCheck('overextended/ox_inventory')
+	lib.versionCheck('overextended/ox_inventory')
 end
 
 local TriggerEventHooks = require 'modules.hooks.server'
@@ -203,7 +200,23 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 				end
 			end
 
+		elseif invType == 'parkmeter' then
+			right = Inventory(data)
+			if not right then
+				local netid = tonumber(data:sub(9))
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, locale('parkmeter'), invType, 15, 0, 100000, false)
+				end
+			end	
 			
+		elseif invType == 'cellphone' then
+			right = Inventory(data)
+			if not right then
+				local netid = tonumber(data:sub(9))
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, locale('cellphone'), invType, 15, 0, 100000, false)
+				end
+			end	
 
 		elseif invType == 'container' then
 			left.containerSlot = data --[[@as number]]

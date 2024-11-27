@@ -584,7 +584,7 @@ function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, i
         dbId = dbId
 	}
 
-	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' or invType == 'binbag' then
+	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' or invType == 'binbag' or invType == 'cellhone' or invType == 'parkmeter' then
 		self.datastore = true
 	else
 		self.changed = false
@@ -778,6 +778,10 @@ local function generateItems(inv, invType, items)
 			items = randomLoot(server.dumpsterloot)
 		elseif invType == 'binbag' then
 			items = randomLoot(server.binbagloot)
+		elseif invType == 'parkmeter' then
+			items = randomLoot(server.parkmeterloot)
+		elseif invType == 'cellphone' then
+			items = randomLoot(server.cellphoneloot)
 		elseif invType == 'vehicle' then
 			items = randomLoot(server.vehicleloot)
 		end
@@ -824,12 +828,22 @@ function Inventory.Load(id, invType, owner)
         end
 	elseif invType == 'dumpster' then
 		if server.randomloot then
-			return generateItems(id, invType)
+			return generateItems(id, invType, nil)
 		end
 
 	elseif invType == 'binbag' then
 		if server.randomloot then
-			return generateItems(id, invType)
+			return generateItems(id, invType, nil)
+		end
+
+	elseif invType == 'parkmeter' then
+		if server.randomloot then
+			return generateItems(id, invType, nil)
+		end
+
+	elseif invType == 'cellphone' then
+		if server.randomloot then
+			return generateItems(id, invType, nil)
 		end
 
 	elseif id then
@@ -2747,5 +2761,86 @@ function Inventory.InspectInventory(playerId, invId)
 end
 
 exports('InspectInventory', Inventory.InspectInventory)
+
+
+
+
+Inventory.ParkmeterRobbed = {}
+Inventory.ParkmeterPaid = {}
+Inventory.ParkmeterCooldown = 10
+RegisterNetEvent('ox_inventory:payoarkfee', function(pos)
+    local src = source
+    local Player = server.GetPlayerFromId(src)
+    if not Player then return end
+    if not Inventory.ParkmeterRobbed[pos] then Inventory.ParkmeterRobbed[pos] = false end
+    if Inventory.RemoveItem(src, "cash", 5) then
+        local id = math.random(10000, 99999)
+        Inventory.ParkmeterPaid[id] = {coords = pos}
+        Inventory.ParkmeterRobbed[pos] = false
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "U heeft parkeergeld betaald!", "success")
+        Wait(Inventory.ParkmeterCooldown * 60000)
+        Inventory.ParkmeterPaid[id] = nil
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Parkeergeld is verlopen!", "error")
+    else
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Je hebt niet genoeg contant geld!", "error")
+    end
+end)
+
+RegisterNetEvent('ox_inventory:parkmeter-robbery', function(pos)
+    local src = source
+    local Player = server.GetPlayerFromId(src)
+    if Player then
+        if Inventory.ParkmeterRobbed[pos] then
+            TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is al leeg geroofd!", "error")
+        elseif not Inventory.ParkmeterRobbed[pos] then
+            Inventory.ParkmeterRobbed[pos] = {state = true}
+            local amount = math.random(1, 15)
+            Inventory.AddItem(src, 'black_money', amount)
+            if math.random() <= 0.2 then
+                Inventory.RemoveItem(src, shared.lockpickItem, 1)
+            end
+        end
+    end
+end)
+
+RegisterNetEvent('ox_inventory:checkmeter', function(pos)
+    local src = source
+    local Player = server.GetPlayerFromId(src)
+    if Player.PlayerData.job.name == 'police' then
+        for k, v in pairs(Parkmeter.Paid) do 
+            if #(pos - v.coords) <= 3.0 then
+                if Inventory.ParkmeterRobbed[pos] then
+                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is leeg geroofd!", "error")
+                else
+                    TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is betaald!", "error")
+                end
+            else
+                TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Deze meter is niet betaald!", "error")
+            end 
+        end
+    else
+        TriggerClientEvent('ox_inventory:mods:notify', src, 'Parking', "Je bent geen agent!", "error")
+    end
+end)
+
+Inventory.CellphoneRobbed = {}
+
+RegisterNetEvent('ox_inventory:cellphone-robbery', function(pos)
+    local src = source
+    local Player = server.GetPlayerFromId(src)
+    if Player then
+        if Inventory.CellphoneRobbed[pos] then
+            TriggerClientEvent('ox_inventory:mods:notify', src, 'Cellphone', "Deze Telefoon cel is al leeg geroofd!", "error")
+        elseif not Inventory.CellphoneRobbed[pos] then
+            Inventory.CellphoneRobbed[pos] = {state = true}
+            local amount = math.random(1, 15)
+            Inventory.AddItem(src, 'black_money', amount)
+            if math.random() <= 0.2 then Inventory.RemoveItem(src, shared.lockpickItem, 1) end
+        end
+    end
+end)
+
+
+
 
 return Inventory

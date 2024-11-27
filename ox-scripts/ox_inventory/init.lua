@@ -18,6 +18,9 @@ shared = {
     playerslots = 50,
     playerweight = 30000,
     target = true,
+    useParkingFee = true,
+    useLockpickParking = true,
+    useLockpickCellphone = true,
     lockpickItem = "lockpick",
     police = json.decode('["police", "sheriff"]'),
 }
@@ -74,6 +77,19 @@ if IsDuplicityVersion() then
 				["garbage", 1, 3],
 				["money", 1, 10],
 				["burger", 1, 1]
+			]
+		]])),
+
+
+        parkmeterloot = json.decode(GetConvar('inventory:parkmeterloot', [[
+			[
+				["money", 1, 10],
+			]
+		]])),
+
+        cellphoneloot = json.decode(GetConvar('inventory:cellphoneloot', [[
+			[
+				["money", 1, 10],
 			]
 		]])),
     }
