@@ -564,15 +564,16 @@ if shared.target then
     })
 
 
+
 	-- mh-snippet (start)
-	exports.ox_target:addModel(Inventory.LootNpcModels, {
+	exports.ox_target:addModel(Inventory.NpcModels, {
         {
             icon = 'fas fa-skull-crossbones',
             label = "Search Citizen",
             onSelect = function(data)
                 if not shared.useNpcLootWhenDead then return false end
                 if not IsEntityDead(entity) then return false end
-                TriggerServerEvent('ox_inventory:lootnpc', PedToNet(data.entity))
+                Inventory.LootNpx(PedToNet(data.entity))
             end,
             canInteract = function(entity, distance, coords, name)
                 if not shared.useNpcLootWhenDead then return false end
