@@ -822,6 +822,17 @@ local function registerCommands()
 				if Inventory.Dumpsters[model] then
 					return Inventory.OpenDumpster(entity)
 				end
+				if Inventory.Parkmeters[model] then
+					return Inventory.LockpickParkmeter(entity)
+				end
+
+				if Inventory.Cellphones[model] then
+					return Inventory.LockpickCellphone(entity)
+				end
+
+				if Inventory.NpcModels[model] then
+					return Inventory.LootNpx(PedToNet(entity))
+				end
 			end
 
 			if entityType ~= 2 then return end
