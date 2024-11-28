@@ -469,7 +469,7 @@ function Inventory.HasLockpick()
     local count = exports.ox_inventory:Search('count', 'lockpick')
     return (count >= 1)
 end
--- mh-snippet (start)
+-- mh-snippet (end)
 
 function Inventory.OpenDumpster(entity)
 	local netId = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity)
