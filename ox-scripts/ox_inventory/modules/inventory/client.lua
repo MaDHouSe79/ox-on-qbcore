@@ -564,7 +564,6 @@ if shared.target then
     })
 
 
-
 	-- mh-snippet (start)
 	exports.ox_target:addModel(Inventory.NpcModels, {
         {
@@ -630,15 +629,30 @@ if shared.target then
 	-- mh-snippet (end)
 
 else
-	local dumpsters = table.create(0, #Inventory.Dumpsters)
-
+    local dumpsters = table.create(0, #Inventory.Dumpsters)
 	for i = 1, #Inventory.Dumpsters do
 		dumpsters[Inventory.Dumpsters[i]] = true
 	end
-
 	Inventory.Dumpsters = dumpsters
+	
+	local parkmeters = table.create(0, #Inventory.Parkmeters)
+	for i = 1, #Inventory.Parkmeters do
+		parkmeters[Inventory.Parkmeters[i]] = true
+	end
+	Inventory.Parkmeters = parkmeters
+	
+	local cellphones = table.create(0, #Inventory.Cellphones)
+	for i = 1, #Inventory.Cellphones do
+		cellphones[Inventory.Cellphones[i]] = true
+	end
+	Inventory.Cellphones = cellphones
+	
+	local lootNpcModels = table.create(0, #Inventory.NpcModels)
+	for i = 1, #Inventory.NpcModels do
+		lootNpcModels[Inventory.NpcModels[i]] = true
+	end
+	Inventory.NpcModels = lootNpcModels
 end
-
 ---@param search 'slots' | 1 | 'count' | 2
 ---@param item table | string
 ---@param metadata? table | string
