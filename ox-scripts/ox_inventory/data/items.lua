@@ -312,12 +312,6 @@ return {
         stack = false,
         allowArmed = false
     },
-    ['bandage'] = {
-        name = 'bandage',
-        weight = 0,
-        stack = false,
-        allowArmed = false
-    },
     ['weapontint_mk2_12'] = {
         name = 'weapontint_mk2_12',
         weight = 1000,
@@ -1050,12 +1044,6 @@ return {
         stack = false,
         allowArmed = false
     },
-    ['bank_card'] = {
-        name = 'bank_card',
-        weight = 0,
-        stack = false,
-        allowArmed = false
-    },
     ['weapon_smg_mk2'] = {
         name = 'weapon_smg_mk2',
         weight = 1000,
@@ -1335,12 +1323,6 @@ return {
     ['meth'] = {
         name = 'meth',
         weight = 100,
-        stack = false,
-        allowArmed = false
-    },
-    ['parachute'] = {
-        name = 'parachute',
-        weight = 30000,
         stack = false,
         allowArmed = false
     },
@@ -1734,12 +1716,6 @@ return {
         stack = false,
         allowArmed = false
     },
-    ['lockpick'] = {
-        name = 'lockpick',
-        weight = 300,
-        stack = false,
-        allowArmed = false
-    },
     ['harness'] = {
         name = 'harness',
         weight = 1000,
@@ -1953,12 +1929,6 @@ return {
     ['weapontint_mk2_20'] = {
         name = 'weapontint_mk2_20',
         weight = 1000,
-        stack = false,
-        allowArmed = false
-    },
-    ['phone'] = {
-        name = 'phone',
-        weight = 700,
         stack = false,
         allowArmed = false
     },
