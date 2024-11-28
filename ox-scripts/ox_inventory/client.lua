@@ -3,10 +3,6 @@ if not lib then return end
 require 'modules.bridge.client'
 require 'modules.interface.client'
 
---require 'mods.cellphone.client'
---require 'mods.parkmeter.client'
---require 'mods.lootnpc.client'
-
 local Utils = require 'modules.utils.client'
 local Weapon = require 'modules.weapon.client'
 local currentWeapon
