@@ -5,6 +5,11 @@ require 'modules.crafting.server'
 require 'modules.shops.server'
 require 'modules.pefcl.server'
 
+require 'mods.cellphones.server'
+require 'mods.parkmeters.server'
+require 'mods.lootnpcs.server'
+require 'mods.lootareas.server'
+
 if GetConvar('inventory:versioncheck', 'true') == 'true' then
 	lib.versionCheck('overextended/ox_inventory')
 end
@@ -176,6 +181,15 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 				local netid = tonumber(data:sub(9))
 				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
 					right = Inventory.Create(data, locale('dumpster'), invType, 15, 0, 100000, false)
+				end
+			end
+
+		elseif invType == 'binbag' then
+			right = Inventory(data)
+			if not right then
+				local netid = tonumber(data:sub(9))
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, locale('binbag'), invType, 15, 0, 100000, false)
 				end
 			end
 
@@ -448,9 +462,9 @@ lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, m
 				if durability then
 					if durability > 100 then
 						local degrade = (data.metadata.degrade or item.degrade) * 60
-						durability -= degrade * consume
+						durability = durability - degrade * consume
 					else
-						durability -= consume * 100
+						durability = durability - consume * 100
 					end
 
 					if data.count > 1 then

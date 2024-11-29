@@ -21,6 +21,8 @@ shared = {
     useLockpickCellphone = GetConvarInt('inventory:useLockpickCellphone', 0) == 1,
     useLockpickParkmeter = GetConvarInt('inventory:useLockpickParkmeter', 0) == 1,
     useNpcLootWhenDead = GetConvarInt('inventory:useNpcLootWhenDead', 0) == 1,
+    useParkmeterFee = GetConvarInt('inventory:useParkmeterFee', 0) == 1,
+    lockpickItem = GetConvar('inventory:lockpickItem', 'lockpick'),
     police = json.decode(GetConvar('inventory:police', '["police", "sheriff"]')),
 }
 
@@ -49,6 +51,7 @@ if IsDuplicityVersion() then
         randomloot = GetConvarInt('inventory:randomloot', 1) == 1,
         evidencegrade = GetConvarInt('inventory:evidencegrade', 2),
         trimplate = GetConvarInt('inventory:trimplate', 1) == 1,
+        
         vehicleloot = json.decode(GetConvar('inventory:vehicleloot', [[
 			[
 				["sprunk", 1, 1],
@@ -60,7 +63,17 @@ if IsDuplicityVersion() then
 				["bandage", 1, 1]
 			]
 		]])),
+
         dumpsterloot = json.decode(GetConvar('inventory:dumpsterloot', [[
+			[
+				["mustard", 1, 1],
+				["garbage", 1, 3],
+				["money", 1, 10],
+				["burger", 1, 1]
+			]
+		]])),
+
+        binbagloot = json.decode(GetConvar('inventory:binbagloot', [[
 			[
 				["mustard", 1, 1],
 				["garbage", 1, 3],
@@ -88,7 +101,7 @@ else
         weaponanims = GetConvarInt('inventory:weaponanims', 1) == 1,
         itemnotify = GetConvarInt('inventory:itemnotify', 1) == 1,
         weaponnotify = GetConvarInt('inventory:weaponnotify', 1) == 1,
-        imagepath = GetConvar('inventory:imagepath', 'nui://ox_inventory/web/images'),
+        imagepath = GetConvar('inventory:imagepath', 'nui://ox_inventory/html/assets/images'),
         dropprops = GetConvarInt('inventory:dropprops', 0) == 1,
         dropmodel = joaat(GetConvar('inventory:dropmodel', 'prop_med_bag_01b')),
         weaponmismatch = GetConvarInt('inventory:weaponmismatch', 1) == 1,
@@ -184,9 +197,8 @@ if not success then
     return spamError(msg)
 end
 
-if not LoadResourceFile(shared.resource, 'web/build/index.html') then
-    return spamError(
-        'UI has not been built, refer to the documentation or download a release build.\n	^3https://overextended.dev/ox_inventory^0')
+if not LoadResourceFile(shared.resource, 'html/index.html') then
+    return spamError('UI has not been built, refer to the documentation or download a release build.\n	^3https://overextended.dev/ox_inventory^0')
 end
 
 -- No we're not going to support qtarget any longer.

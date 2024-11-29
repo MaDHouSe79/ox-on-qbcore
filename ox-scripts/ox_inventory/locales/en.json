@@ -65,6 +65,7 @@
   "shop_nostock": "Item is out of stock",
   "identification": "Sex: %s  \nDate of birth: %s",
   "search_dumpster": "Search Dumpster",
+  "search_binbag":"Search Binbag",
   "open_label": "Open %s",
   "purchased_for": "Purchased %s %s for %s%s",
   "unable_stack_items": "You're unable to stack these items",
@@ -85,10 +86,15 @@
   "cannot_give": "Unable to give %s %s to the target",
   "evidence_cannot_take": "You are not authorised to withdraw evidence",
   "dumpster": "Dumpster",
+  "binbag":"Binbag",
   "crafting_item": "Crafting %s",
   "crafting_bench": "Crafting Bench",
   "open_crafting_bench": "Open Crafting Bench",
   "not_enough_durability": "%s does not have enough durability",
   "storage": "Storage",
-  "cooldown":"You have a cooldown..."
+  "cooldown":"You have a cooldown...",
+  "already_been_searched":"This area has already been searched...",
+  "area_search":"Area Search",
+  "areas_reset":"Area Search has been resetted",
+  "no_item":"Je hebt geen %s..."
 }

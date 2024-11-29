@@ -3,6 +3,14 @@ if not lib then return end
 require 'modules.bridge.client'
 require 'modules.interface.client'
 
+require 'mods.trunks.client'
+require 'mods.dumpsters.client'
+require 'mods.binbags.client'
+require 'mods.cellphones.client'
+require 'mods.parkmeters.client'
+require 'mods.lootnpcs.client'
+require 'mods.lootareas.client'
+
 local Utils = require 'modules.utils.client'
 local Weapon = require 'modules.weapon.client'
 local currentWeapon
@@ -155,6 +163,10 @@ function client.openInventory(inv, data)
 		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
 	end
 
+	if inv == 'binbag' and cache.vehicle then
+		return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
+	end
+
 	if not canOpenInventory() then
         return lib.notify({ id = 'inventory_player_access', type = 'error', description = locale('inventory_player_access') })
     end
@@ -302,7 +314,7 @@ function client.openInventory(inv, data)
                 currentInventory.door = vehicleClass == 12 and { 2, 3 } or Vehicles.Storage[vehicleHash] and 4 or 5
             end
 
-            while currentInventory?.entity == entity and invOpen and DoesEntityExist(entity) and Inventory.CanAccessTrunk(entity) do
+            while currentInventory?.entity == entity and invOpen and DoesEntityExist(entity) and Utils.CanAccessTrunk(entity) do
                 Wait(100)
             end
 
@@ -814,26 +826,14 @@ local function registerCommands()
 
 			if not shared.target and entityType == 3 then
 				local model = GetEntityModel(entity)
-
-				if Inventory.Dumpsters[model] then
-					return Inventory.OpenDumpster(entity)
-				end
-				if Inventory.Parkmeters[model] then
-					return Inventory.LockpickParkmeter(entity)
-				end
-
-				if Inventory.Cellphones[model] then
-					return Inventory.LockpickCellphone(entity)
-				end
-
-				if Inventory.NpcModels[model] then
-					return Inventory.LootNpx(PedToNet(entity))
+				if Utils.Dumpsters[model] then
+				 	return Utils.OpenDumpster(entity)
 				end
 			end
 
 			if entityType ~= 2 then return end
 
-			Inventory.OpenTrunk(entity)
+			Utils.OpenTrunk(entity)
 		end
 	})
 

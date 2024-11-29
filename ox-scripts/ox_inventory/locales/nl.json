@@ -62,6 +62,7 @@
   "shop_nostock": "Item is niet op voorraad",
   "identification": "Geslacht: %s  \nGeboortedatum: %s",
   "search_dumpster": "Vuilnisbak doorzoeken",
+  "search_binbag":"Vuilniszak doorzoeken",
   "open_label": "Open %s",
   "purchased_for": "%s %s gekocht voor %s%s",
   "unable_stack_items": "Je kan deze items niet op elkaar stapelen",
@@ -82,9 +83,14 @@
   "cannot_give": "Niet in staat om %s %s te geven aan het doel",
   "evidence_cannot_take": "Je rang is niet hoog genoeg om van de bewijskluis te pakken",
   "dumpster": "Afvalcontainer",
+  "binbag":"Afvalzak",
   "crafting_item": "%s aan het maken",
   "crafting_bench": "Werkbank",
   "open_crafting_bench": "Open Werkbank",
   "not_enough_durability": "%s heeft niet genoeg levensduur.",
-  "cooldown":"Je hebt een cooldown..."
+  "cooldown":"Je hebt een cooldown...",
+  "already_been_searched":"Dit gebied is al doorzocht...",
+  "area_search":"Area Search",
+  "areas_reset":"Area Search has been resetted",
+  "no_item":"You don't have a %s..."
 }
