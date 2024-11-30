@@ -2,12 +2,12 @@ local robbed = {}
 local coolDown = {}
 
 local function CoolDown(src, type, pos)
-	local coords = GetEntityCoords(GetPlayerPed(src))
+    local coords = GetEntityCoords(GetPlayerPed(src))
     if not coolDown[src] then
         coolDown[src] = {}
         if not coolDown[src][type] then coolDown[src][type] = {} end
     end
-	coolDown[src][type] = {enable = true, coords = pos}
+    coolDown[src][type] = { enable = true, coords = pos}
     SetTimeout(10000, function() coolDown[src][type].enable = false end)
 end
 

@@ -11,20 +11,23 @@ function Cellphones.Functions.Lockpick(entity)
 end
 
 if shared.target then
-	exports.ox_target:addModel(Cellphones.Models, {
-		icon = 'fas fa-phone',
-		label = locale('lockpick'),
+    exports.ox_target:addModel(Cellphones.Models, {
+        icon = 'fas fa-phone',
+        label = locale('lockpick'),
         onSelect = function(data)
-            if not shared.useLockpickCellphone then return false end
+            if not shared.useLockpickCellphone then
+                return false
+            end
             Cellphones.Functions.Lockpick(data.entity)
         end,
-		canInteract = function(entity, distance, coords, name)
-            if not shared.useLockpickCellphone then return false end
+        canInteract = function(entity, distance, coords, name)
+            if not shared.useLockpickCellphone then
+                return false
+            end
             return true
         end,
-		distance = 2
-	})
-
+        distance = 2
+    })
 end
 
 local Utils = require 'modules.utils.client'

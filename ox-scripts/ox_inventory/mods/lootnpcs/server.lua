@@ -19,10 +19,10 @@ local function LootNpcRandomItems()
 end
 
 local function OpenMpcInventory(src, entity)
-	local items = LootNpcRandomItems()
-	local mystash = exports.ox_inventory:CreateTemporaryStash({label = 'Citizen', slots = 5, maxWeight = 5000, items = items})
-	TriggerClientEvent('ox_inventory:openInventory', src, 'stash', mystash)
-	TriggerClientEvent('ox_inventory:deleteped', -1, entity) 
+    local items = LootNpcRandomItems()
+    local mystash = exports.ox_inventory:CreateTemporaryStash({label = 'Citizen', slots = 5, maxWeight = 5000, items = items})
+    TriggerClientEvent('ox_inventory:openInventory', src, 'stash', mystash)
+    TriggerClientEvent('ox_inventory:deleteped', -1, entity)
 end
 
 RegisterNetEvent('ox_inventory:lootnpc', function(entity)

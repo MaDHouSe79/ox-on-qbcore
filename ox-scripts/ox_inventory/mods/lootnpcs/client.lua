@@ -1,4 +1,3 @@
-
 local Npc = {}
 local lootedEntities = {}
 local search_time = 7000 -- 7 secs..
@@ -439,6 +438,7 @@ Npc.Models = {
     "u_m_y_zombie_01",
 }
 
+
 local function IsAlreadyLooted(entity)
     local isLooted = false
     if lootedEntities[entity] then isLooted = true end
@@ -446,7 +446,9 @@ local function IsAlreadyLooted(entity)
 end
 
 local function SetIsLooted(entity)
-    if not lootedEntities[entity] then lootedEntities[entity] = true end
+    if not lootedEntities[entity] then
+        lootedEntities[entity] = true
+    end
 end
 
 local function loadAnimDict(animDict)
@@ -458,39 +460,41 @@ local function loadAnimDict(animDict)
 end
 
 function Npc.Functions.Loot(entity)
-    if IsAlreadyLooted(entity) then 
+    if IsAlreadyLooted(entity) then
         lib.notify("This citizen is already been robbed by somebody..")
     else
         loadAnimDict('amb@medic@standing@kneel@base')
-	    loadAnimDict('anim@gangops@facility@servers@bodysearch@')
-	    TaskPlayAnim(PlayerPedId(), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false)
-	    TaskPlayAnim(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false)
-	    Wait(5000)
-	    StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@" ,"player_search", 1.0)
+        loadAnimDict('anim@gangops@facility@servers@bodysearch@')
+        TaskPlayAnim(PlayerPedId(), "amb@medic@standing@kneel@base", "base", 8.0, -8.0, -1, 1, 0, false, false, false)
+        TaskPlayAnim(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@", "player_search", 8.0, -8.0, -1, 48, 0, false, false, false)
+        Wait(5000)
+        StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@", "player_search", 1.0)
         ClearPedTasks(PlayerPedId())
         SetIsLooted(entity)
-        TriggerServerEvent('ox_inventory:lootnpc', PedToNet(entity))     
+        TriggerServerEvent('ox_inventory:lootnpc', PedToNet(entity))
     end
 end
 
 if shared.target then
-	exports.ox_target:addModel(Npc.Models, {
-        {
-            icon = 'fas fa-skull-crossbones',
-            label = "Search Citizen",
-            onSelect = function(data)
-                TaskTurnPedToFaceEntity(PlayerPedId(), data.entity, 5000)
-                Wait(1500)
-                Npc.Functions.Loot(PedToNet(data.entity))
-            end,
-            canInteract = function(entity, distance, coords, name)
-                if not shared.useNpcLootWhenDead then return false end
-                if not IsEntityDead(entity) then return false end
-                return true
-            end,
-            distance = 1.0
-        }
-    })
+    exports.ox_target:addModel(Npc.Models, {{
+        icon = 'fas fa-skull-crossbones',
+        label = "Search Citizen",
+        onSelect = function(data)
+            TaskTurnPedToFaceEntity(PlayerPedId(), data.entity, 5000)
+            Wait(1500)
+            Npc.Functions.Loot(PedToNet(data.entity))
+        end,
+        canInteract = function(entity, distance, coords, name)
+            if not shared.useNpcLootWhenDead then
+                return false
+            end
+            if not IsEntityDead(entity) then
+                return false
+            end
+            return true
+        end,
+        distance = 1.0
+    }})
 end
 
 local Utils = require 'modules.utils.client'

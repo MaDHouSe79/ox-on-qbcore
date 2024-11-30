@@ -35,6 +35,7 @@ local Models = {
     },
 }
 
+
 local function IsAlreadyLooted(entity)
     local isLooted = false
     if lootedEntities[entity] then isLooted = true end

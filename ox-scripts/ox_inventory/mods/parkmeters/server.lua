@@ -1,14 +1,15 @@
 local parkmeter = {}
 local robbed = {}
 local coolDown = {}
+local paid = {}
 
 local function CoolDown(src, type, pos)
-	local coords = GetEntityCoords(GetPlayerPed(src))
+    local coords = GetEntityCoords(GetPlayerPed(src))
     if not coolDown[src] then
         coolDown[src] = {}
         if not coolDown[src][type] then coolDown[src][type] = {} end
     end
-	coolDown[src][type] = {enable = true, coords = pos}
+    coolDown[src][type] = {enable = true, coords = pos}
     SetTimeout(10000, function() coolDown[src][type].enable = false end)
 end
 
@@ -22,16 +23,13 @@ local function HasCooldown(src, type, pos)
 end
 
 local function SetParkTimer(src, type, pos)
-	local coords = GetEntityCoords(GetPlayerPed(src))
+    local coords = GetEntityCoords(GetPlayerPed(src))
     if not parkmeter[src] then
         parkmeter[src] = {}
         if not parkmeter[src][type] then parkmeter[src][type] = {} end
     end
-	parkmeter[src][type] = {enable = true, coords = pos}
-    SetTimeout(10000, function() 
-        parkmeter[src][type].enable = false
-    end)
-
+    parkmeter[src][type] = {enable = true, coords = pos}
+    SetTimeout(10000, function() parkmeter[src][type].enable = false end)
 end
 
 RegisterNetEvent('ox_inventory:payoarkfee', function(pos)
@@ -42,13 +40,12 @@ RegisterNetEvent('ox_inventory:payoarkfee', function(pos)
     if exports.ox_inventory:RemoveItem(src, "cash", 5) then
         local coords = GetEntityCoords(GetPlayerPed(src))
         local id = math.random(100000, 999999)
-        parkmeterPaid[id] = {coords = pos}
+        paid[id] = {coords = pos}
         if #(coords - pos) < 2.5 then robbed[pos] = false end
         TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parkmeter_you_paid'), "success")
         SetParkTimer(src, 'park', pos)
-
         Wait(10 * 60000)
-        parkmeterPaid[id] = nil
+        paid[id] = nil
         TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parking_fee_expired'), "error")
     else
         TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('no_cash'), "error")
@@ -59,7 +56,7 @@ RegisterNetEvent('ox_inventory:checkmeter', function(pos)
     local src = source
     local Player = server.GetPlayerFromId(src)
     if Player.PlayerData.job.name == 'police' then
-        for k, v in pairs(parkmeterPaid) do
+        for k, v in pairs(paid) do
             if #(pos - v.coords) <= 3.0 then
                 if parkmeterRobbed[pos] then
                     TriggerClientEvent('ox_inventory:mods:notify', src, 'Parkmeter', locale('parkmeter_is_robbed'), "error")
