@@ -147,7 +147,7 @@ end)
 if Config.useTarget then
     CreateThread(function()
         for i = 1, #Config.locations do
-            if Config.target == "qb-target" then
+            if GetResourceState("qb-target") ~= 'missing' then
                 exports['qb-target']:AddCircleZone('bank_' .. i, Config.locations[i], 1.0, {
                     name = 'bank_' .. i,
                     useZ = true,
@@ -164,7 +164,7 @@ if Config.useTarget then
                     },
                     distance = 1.5
                 })
-            elseif Config.target == "ox_target" then
+            elseif GetResourceState("ox_target") ~= 'missing' then
                 exports.ox_target:addSphereZone({
                     coords = Config.locations[i],
                     radius = 1.0,
@@ -172,8 +172,7 @@ if Config.useTarget then
                     drawSprite = false,
                     options = {
                         {
-                            name = 'bank_sphere',
-                            event = 'ox_target:debug',
+                            name = 'bank_' .. i,
                             icon = 'fas fa-university',
                             label = "Open Bank",
                             onSelect = function()
@@ -188,7 +187,7 @@ if Config.useTarget then
     end)
 
     CreateThread(function()
-        if Config.target == "qb-target" then
+        if GetResourceState("qb-target") ~= 'missing' then
             exports['qb-target']:AddTargetModel(Config.atmModels, {
                 options = {
                     {
@@ -202,7 +201,7 @@ if Config.useTarget then
                 },
                 distance = 1.5
             })
-        elseif Config.target == "ox_target" then
+        elseif GetResourceState("ox_target") ~= 'missing' then
             exports.ox_target:addModel(Config.atmModels, {{
                 name = 'openAtm',
                 icon = 'fa-solid fa-coins',

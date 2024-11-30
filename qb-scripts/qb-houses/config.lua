@@ -1,8 +1,5 @@
 Config = Config or {}
 
-
-Config.Inventory = "ox_inventory"
-
 Config.MinZOffset = 30
 Config.RamsNeeded = 2
 Config.UnownedBlips = false

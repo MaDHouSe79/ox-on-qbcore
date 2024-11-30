@@ -1,5 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-local UseTarget = false --GetConvar('UseTarget', 'false') == 'true'
+local UseTarget = GetConvar('UseTarget', 'false') == 'true'
 local InApartment = false
 local ClosestHouse = nil
 local CurrentApartment = nil
@@ -162,7 +162,16 @@ local function RegisterApartmentEntranceTarget(apartmentID, apartmentData)
         label = Lang:t('text.ring_doorbell'),
     }
 
-    if Apartments.Target == "qb-target" then
+    if GetResourceState("ox_target") ~= 'missing' then
+        exports.ox_target:addBoxZone({
+            name = boxName,
+            coords = coords,
+            size = vec3(2.0, 2.0, 3.500000),
+            rotation = 0.0,
+            options = options,
+            distance = boxData.distance
+        })
+    elseif GetResourceState("qb-target") ~= 'missing' then
         exports['qb-target']:AddBoxZone(boxName, coords, boxData.length, boxData.width, {
             name = boxName,
             heading = boxData.heading,
@@ -172,17 +181,7 @@ local function RegisterApartmentEntranceTarget(apartmentID, apartmentData)
         }, {
             options = options,
             distance = boxData.distance
-        })
-
-    elseif Apartments.Target == "ox_target" then
-        exports.ox_target:addBoxZone({
-            coords = coords,
-            radius = 1.0,
-            debug = false,
-            drawSprite = false,
-            options = options,
-            distance = 1.5
-        })
+        })        
     end
 
     boxData.created = true
@@ -253,7 +252,16 @@ local function RegisterInApartmentTarget(targetKey, coords, heading, options)
 
     local boxName = 'inApartmentTarget_' .. targetKey
 
-    if Apartments.Target == "qb-target" then
+    if GetResourceState("ox_target") ~= 'missing' then
+        exports.ox_target:addBoxZone({
+            name = boxName,
+            coords = coords,
+            size = vec3(2.0, 2.0, 3.500000),
+            rotation = 0.0,
+            options = options,
+            distance = 1
+        })
+    elseif GetResourceState("qb-target") ~= 'missing' then
         exports['qb-target']:AddBoxZone(boxName, coords, 1.5, 1.5, {
             name = boxName,
             heading = heading,
@@ -263,19 +271,9 @@ local function RegisterInApartmentTarget(targetKey, coords, heading, options)
         }, {
             options = options,
             distance = 1
-        })
-    elseif Apartments.Target == "ox_target" then
-        exports.ox_target:addBoxZone({
-            coords = coords,
-            radius = 1.5,
-            minZ = coords.z - 1.0,
-            maxZ = coords.z + 5.0,
-            options = options,
-            distance = 1.5,
-            debug = false,
-            drawSprite = false,
-        })
+        })      
     end
+
     InApartmentTargets[targetKey] = InApartmentTargets[targetKey] or {}
     InApartmentTargets[targetKey].created = true
 end
@@ -286,7 +284,7 @@ local function SetApartmentsEntranceTargets()
     if Apartments.Locations and next(Apartments.Locations) then
         for id, apartment in pairs(Apartments.Locations) do
             if apartment and apartment.coords and apartment.coords['enter'] then
-                if Apartments.UseTarget then
+                if UseTarget then
                     RegisterApartmentEntranceTarget(id, apartment)
                 else
                     RegisterApartmentEntranceZone(id, apartment)
@@ -307,7 +305,7 @@ local function SetInApartmentTargets()
     local outfitsPos = vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.clothes.x, Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.clothes.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.clothes.z)
     local logoutPos = vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.logout.x, Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.logout.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.logout.z)
 
-    if Apartments.UseTarget then
+    if UseTarget then
         RegisterInApartmentTarget('entrancePos', entrancePos, 0, {
             {
                 type = 'client',
@@ -357,11 +355,11 @@ end
 local function DeleteApartmentsEntranceTargets()
     if Apartments.Locations and next(Apartments.Locations) then
         for id, apartment in pairs(Apartments.Locations) do
-            if Apartments.UseTarget then
-                if Apartments.Target == "qb-target" then
-                    exports['qb-target']:RemoveZone('apartmentEntrance_' .. id)
-                elseif Apartments.Target == "ox_target" then
+            if UseTarget then
+                if GetResourceState("ox_target") ~= 'missing' then
                     exports.ox_target:removeZone('apartmentEntrance_' .. id)
+                elseif GetResourceState("qb-target") ~= 'missing' then
+                    exports['qb-target']:RemoveZone('apartmentEntrance_' .. id)
                 end
             else
                 if apartment.polyzoneBoxData.zone then
@@ -382,11 +380,11 @@ local function DeleteInApartmentTargets()
 
     if InApartmentTargets and next(InApartmentTargets) then
         for id, apartmentTarget in pairs(InApartmentTargets) do
-            if Apartments.UseTarget then
-                if Apartments.Target == "qb-target" then
-                    exports['qb-target']:RemoveZone('inApartmentTarget_' .. id)
-                elseif Apartments.Target == "ox_target" then
+            if UseTarget then
+                if GetResourceState("ox_target") ~= 'missing' then
                     exports.ox_target:removeZone('inApartmentTarget_' .. id)
+                elseif GetResourceState("qb-target") ~= 'missing' then
+                    exports['qb-target']:RemoveZone('inApartmentTarget_' .. id)
                 end
             else
                 if apartmentTarget.zone then
@@ -749,7 +747,6 @@ if UseTarget then
 
         while true do
             sleep = 1000
-
             if not InApartment then
                 SetClosestApartment()
                 SetApartmentsEntranceTargets()

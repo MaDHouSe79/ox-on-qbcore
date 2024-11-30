@@ -189,11 +189,13 @@ QBCore.Functions.CreateCallback('qb-banking:server:openATM', function(source, cb
     local bankCards = Player.Functions.GetItemsByName('bank_card')
     if not bankCards then return TriggerClientEvent('QBCore:Notify', src, Lang:t('error.card'), 'error') end
     local acceptablePins = {}
-    if Config.inventory == 'ox_inventory' then
-        for _, bankCard in ipairs(bankCards) do acceptablePins[#acceptablePins + 1] = bankCard.metadata.cardPin end   
-    elseif Config.inventory == 'qb-inventory' then
-        for _, bankCard in ipairs(bankCards) do acceptablePins[#acceptablePins + 1] = bankCard.info.cardPin end    
+
+    if GetResourceState("ox_inventory") ~= 'missing' then
+        for _, bankCard in ipairs(bankCards) do acceptablePins[#acceptablePins + 1] = bankCard.metadata.cardPin end
+    elseif GetResourceState("qb-inventory") ~= 'missing' then
+        for _, bankCard in ipairs(bankCards) do acceptablePins[#acceptablePins + 1] = bankCard.info.cardPin end
     end
+
     local job = Player.PlayerData.job
     local gang = Player.PlayerData.gang
     local accounts = {}
@@ -352,11 +354,11 @@ QBCore.Functions.CreateCallback('qb-banking:server:orderCard', function(source, 
         cardNumber = cardNumber,
         cardPin = pinNumber,
     }
-
-    exports.ox_inventory:AddItem(src, 'bank_card', 1, info)
-
-    --Player.Functions.AddItem('bank_card', 1, nil, info)
-    --exports['qb-inventory']:AddItem(src, 'bank_card', 1, false, info, 'qb-banking:server:orderCard')
+    if GetResourceState("ox_inventory") ~= 'missing' then
+        exports.ox_inventory:AddItem(src, 'bank_card', 1, info)
+    elseif GetResourceState("qb-inventory") ~= 'missing' then
+        exports['qb-inventory']:AddItem(src, 'bank_card', 1, false, info, 'qb-banking:server:orderCard')
+    end
     cb({ success = true, message = Lang:t('success.card') })
 end)
 

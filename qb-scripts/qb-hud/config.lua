@@ -7,54 +7,53 @@ Config.MinimumSpeedUnbuckled = 50 -- Going Over This Speed Unbuckled Will Cause 
 Config.MinimumSpeed = 100         -- Going Over This Speed While Buckled Will Cause Stress
 Config.DisableStress = false      -- If true will disable stress completely for all players
 
-Config.FualScript = "ox_fuel"     -- Default LegacyFuel or ox_fuel
-
+Config.FuelScript = "LegacyFuel"
 -- Stress
 Config.WhitelistedWeaponArmed = { -- Disable showing armed icon from weapons in this table
     -- miscellaneous
-    ['weapon_petrolcan'] = true,
-    ['weapon_hazardcan'] = true,
-    ['weapon_fireextinguisher'] = true,
+    [`weapon_petrolcan`] = true,
+    [`weapon_hazardcan`] = true,
+    [`weapon_fireextinguisher`] = true,
     -- melee
-    ['weapon_dagger'] = true,
-    ['weapon_bat'] = true,
-    ['weapon_bottle'] = true,
-    ['weapon_crowbar'] = true,
-    ['weapon_flashlight'] = true,
-    ['weapon_golfclub'] = true,
-    ['weapon_hammer'] = true,
-    ['weapon_hatchet'] = true,
-    ['weapon_knuckle'] = true,
-    ['weapon_knife'] = true,
-    ['weapon_machete'] = true,
-    ['weapon_switchblade'] = true,
-    ['weapon_nightstick'] = true,
-    ['weapon_wrench'] = true,
-    ['weapon_battleaxe'] = true,
-    ['weapon_poolcue'] = true,
-    ['weapon_briefcase'] = true,
-    ['weapon_briefcase_02'] = true,
-    ['weapon_garbagebag'] = true,
-    ['weapon_handcuffs'] = true,
-    ['weapon_bread'] = true,
-    ['weapon_stone_hatchet'] = true,
+    [`weapon_dagger`] = true,
+    [`weapon_bat`] = true,
+    [`weapon_bottle`] = true,
+    [`weapon_crowbar`] = true,
+    [`weapon_flashlight`] = true,
+    [`weapon_golfclub`] = true,
+    [`weapon_hammer`] = true,
+    [`weapon_hatchet`] = true,
+    [`weapon_knuckle`] = true,
+    [`weapon_knife`] = true,
+    [`weapon_machete`] = true,
+    [`weapon_switchblade`] = true,
+    [`weapon_nightstick`] = true,
+    [`weapon_wrench`] = true,
+    [`weapon_battleaxe`] = true,
+    [`weapon_poolcue`] = true,
+    [`weapon_briefcase`] = true,
+    [`weapon_briefcase_02`] = true,
+    [`weapon_garbagebag`] = true,
+    [`weapon_handcuffs`] = true,
+    [`weapon_bread`] = true,
+    [`weapon_stone_hatchet`] = true,
     -- throwables
-    ['weapon_grenade'] = true,
-    ['weapon_bzgas'] = true,
-    ['weapon_molotov'] = true,
-    ['weapon_stickybomb'] = true,
-    ['weapon_proxmine'] = true,
-    ['weapon_snowball'] = true,
-    ['weapon_pipebomb'] = true,
-    ['weapon_ball'] = true,
-    ['weapon_smokegrenade'] = true,
-    ['weapon_flare'] = true
+    [`weapon_grenade`] = true,
+    [`weapon_bzgas`] = true,
+    [`weapon_molotov`] = true,
+    [`weapon_stickybomb`] = true,
+    [`weapon_proxmine`] = true,
+    [`weapon_snowball`] = true,
+    [`weapon_pipebomb`] = true,
+    [`weapon_ball`] = true,
+    [`weapon_smokegrenade`] = true,
+    [`weapon_flare`] = true
 }
 
 Config.WhitelistedWeaponStress = { -- Disable gaining stress from weapons in this table
-    ['weapon_petrolcan'] = true,
-    ['weapon_hazardcan'] = true,
-    ['weapon_fireextinguisher'] = true
+    [`weapon_petrolcan`] = true,
+    [`weapon_hazardcan`] = true,
+    [`weapon_fireextinguisher`] = true
 }
 
 Config.VehClassStress = { -- Enable/Disable gaining stress from vehicle classes in this table
@@ -82,7 +81,7 @@ Config.VehClassStress = { -- Enable/Disable gaining stress from vehicle classes 
 }
 
 Config.WhitelistedVehicles = { -- Disable gaining stress from speeding in any vehicle in this table
-    --['adder'] = true
+    --[`adder`] = true
 }
 
 Config.WhitelistedJobs = { -- Disable stress completely for players with matching job or job type

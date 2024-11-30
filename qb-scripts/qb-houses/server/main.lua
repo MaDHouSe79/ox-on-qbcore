@@ -225,19 +225,22 @@ RegisterNetEvent('qb-houses:server:openStash', function(CurrentHouse)
     local stashSlots = Config.StashWeights[houseTier].slots
     local stashWeight = Config.StashWeights[houseTier].maxweight
     if stashSlots and stashWeight then
-        if Config.Inventory == "ox_inventory" then
-            exports.ox_inventory:forceOpenInventory(src, 'house', CurrentHouse)
-        elseif Config.Inventory == "qb-inventory" then
-            exports['qb-inventory']:OpenInventory(src, CurrentHouse, {
-                maxweight = stashWeight,
-                slots = stashSlots,
-                label = houseData.adress
-            })            
-        end
+        RegisterNetEvent('apartments:server:openStash', function(CurrentApartment)
+            local src = source
+            if GetResourceState("ox_inventory") ~= 'missing' then
+                exports.ox_inventory:forceOpenInventory(src, 'house', CurrentApartment)
+            elseif GetResourceState("qb-inventory") ~= 'missing' then
+                exports['qb-inventory']:OpenInventory(src, CurrentHouse, {
+                    maxweight = stashWeight,
+                    slots = stashSlots,
+                    label = houseData.adress
+                })
+            end
+        end)
     else
-        if Config.Inventory == "ox_inventory" then
-            exports.ox_inventory:forceOpenInventory(src, 'house', CurrentHouse)
-        elseif Config.Inventory == "qb-inventory" then
+        if GetResourceState("ox_inventory") ~= 'missing' then
+            exports.ox_inventory:forceOpenInventory(src, 'house', CurrentApartment)
+        elseif GetResourceState("qb-inventory") ~= 'missing' then
             exports['qb-inventory']:OpenInventory(src, CurrentHouse)
         end
     end

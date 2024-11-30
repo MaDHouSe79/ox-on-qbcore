@@ -60,8 +60,11 @@ end)
 
 RegisterNetEvent('apartments:server:openStash', function(CurrentApartment)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    exports.ox_inventory:forceOpenInventory(src, 'apartment', CurrentApartment)
+    if GetResourceState("ox_inventory") ~= 'missing' then
+        exports.ox_inventory:forceOpenInventory(src, 'apartment', CurrentApartment)
+    elseif GetResourceState("qb-inventory") ~= 'missing' then
+        exports['qb-inventory']:OpenInventory(src, CurrentApartment)
+    end
 end)
 
 RegisterNetEvent('apartments:server:CreateApartment', function(type, label, firstSpawn)

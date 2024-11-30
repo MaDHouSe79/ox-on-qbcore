@@ -673,14 +673,8 @@ local lastFuelCheck = {}
 local function getFuelLevel(vehicle)
     local updateTick = GetGameTimer()
     if (updateTick - lastFuelUpdate) > 2000 then
-        lastFuelUpdate = updateTick           
-        if Config.FualScript == "LegacyFuel" then
-            lastFuelCheck = math.floor(exports['LegacyFuel']:GetFuel(vehicle))
-        elseif Config.FualScript == "ox_fuel" then
-            lastFuelCheck = exports.ox_fuel.GetFuel(vehicle)
-        else
-            lastFuelCheck = math.floor(GetVehicleFuelLevel(vehicle))
-        end
+        lastFuelUpdate = updateTick
+        lastFuelCheck = math.floor(exports[Config.FuelScript]:GetFuel(vehicle))
     end
     return lastFuelCheck
 end
@@ -702,7 +696,7 @@ CreateThread(function()
             local weapon = GetSelectedPedWeapon(player)
             -- Player hud
             if not config.WhitelistedWeaponArmed[weapon] then
-                if weapon ~= 'WEAPON_UNARMED' then
+                if weapon ~= `WEAPON_UNARMED` then
                     armed = true
                 else
                     armed = false
@@ -854,16 +848,7 @@ CreateThread(function()
         if LocalPlayer.state.isLoggedIn then
             local ped = PlayerPedId()
             if IsPedInAnyVehicle(ped, false) and not IsThisModelABicycle(GetEntityModel(GetVehiclePedIsIn(ped, false))) then
-                local level = 0
-                local vehicle = GetVehiclePedIsIn(ped, false)
-                if Config.FualScript == "LegacyFuel" then
-                    level = exports['LegacyFuel']:GetFuel(vehicle)
-                elseif Config.FualScript == "ox_fuel" then
-                    level = exports['ox_fuel']:GetFuel(vehicle)
-                else
-                    level = SetVehicleFuelLevel(vehicle)
-                end
-                if level <= 20 then -- At 20% Fuel Left
+                if exports[Config.FuelScript]:GetFuel(GetVehiclePedIsIn(ped, false)) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
                         QBCore.Functions.Notify(Lang:t('notify.low_fuel'), 'error')
@@ -881,6 +866,7 @@ end)
 local Round = math.floor
 
 RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
+    print(type, amount)
     if amount == nil then amount = 0 end
     if type == 'cash' then
         SendNUIMessage({
@@ -973,7 +959,7 @@ if not config.DisableStress then
             if LocalPlayer.state.isLoggedIn then
                 local ped = PlayerPedId()
                 local weapon = GetSelectedPedWeapon(ped)
-                if weapon ~= 'WEAPON_UNARMED' then
+                if weapon ~= `WEAPON_UNARMED` then
                     if IsPedShooting(ped) and not config.WhitelistedWeaponStress[weapon] then
                         if math.random() < config.StressChance then
                             TriggerServerEvent('hud:server:GainStress', math.random(1, 3))

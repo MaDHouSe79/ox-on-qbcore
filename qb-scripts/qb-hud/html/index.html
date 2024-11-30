@@ -202,16 +202,19 @@
                         <p v-if="showBank"><span id="sign">$&nbsp;</span><span id="bank">{{(bank)}}</span></p>
                     </transition>
                 </div>
-                <div id="money-blackmoney">
+                
+                <div id="money-cash">
                     <transition name="slide-fade">
-                        <p v-if="showBlack"><span id="sign">$&nbsp;</span><span id="blackmoney">{{(blackmoney)}}</span></p>
+                        <p v-if="showBlack"><span id="sign">$&nbsp;</span><span id="money">{{(blackmoney)}}</span></p>
                     </transition>
                 </div>
-                <div id="money-crypto">
+                
+                <div id="money-cash">
                     <transition name="slide-fade">
-                        <p v-if="showCrypto"><span id="sign">₿&nbsp;</span><span id="crypto">{{(crypto)}}</span></p>
+                        <p v-if="showCrypto"><span id="sign">₿&nbsp;</span><span id="money">{{(crypto)}}</span></p>
                     </transition>
                 </div>
+
                 <div id="money-change" v-if="showUpdate">
                     <p v-if="plus" id="money"><span id="plus">+&nbsp;</span><span id="money">{{(amount)}}</span></p>
                     <p v-else-if="minus" id="minus"><span id="minus">-&nbsp;</span><span id="money">{{(amount)}}</span></p>
