@@ -270,6 +270,10 @@ exportHandler('RemoveGlobalPlayer', function(labels)
     api.removeGlobalPlayer(labels)
 end)
 
+export('RemovePed', function(data)
+    api.removePed(data)
+end)
+
 local utils = require 'client.utils'
 
 exportHandler('AddEntityZone', function()

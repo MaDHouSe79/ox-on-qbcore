@@ -12,6 +12,35 @@ ox_target is the successor to qtarget, which was a mostly-compatible fork of bt-
 To improve many design flaws, ox_target has been written from scratch and drops support for bt-target/qtarget standards, though partial compatibility is being implemented where possible.
 
 
+```lua
+exports.ox_target:SpawnPed({
+    model = 'a_m_m_indian_01',
+    coords = vector4(901.34, -170.06, 74.08, 228.81),
+    minusOne = true,
+    freeze = true,
+    invincible = true,
+    blockevents = true,
+    animDict = 'abigail_mcs_1_concat-0',
+    anim = 'csb_abigail_dual-0',
+    flag = 1,
+    scenario = 'WORLD_HUMAN_AA_COFFEE',
+    target = {
+        options = {
+            {
+                type = 'client',
+                event = 'qb-taxijob:client:requestcab',
+                icon = 'fas fa-sign-in-alt',
+                label = '🚕 Request Taxi Cab',
+                job = jobRequired,
+            }
+        },
+        distance = 2.5,
+    },
+    spawnNow = true,
+    currentpednumber = 0,
+ })  
+```
+
 ## 📚 Documentation
 
 https://overextended.dev/ox_target

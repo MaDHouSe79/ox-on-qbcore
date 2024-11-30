@@ -1,5 +1,8 @@
 
 local Npc = {}
+local lootedEntities = {}
+local search_time = 7000 -- 7 secs..
+
 Npc.Functions = {}
 Npc.Models = {
     "a_f_m_beach_01",
@@ -436,10 +439,38 @@ Npc.Models = {
     "u_m_y_zombie_01",
 }
 
+local function IsAlreadyLooted(entity)
+    local isLooted = false
+    if lootedEntities[entity] then isLooted = true end
+    return isLooted
+end
+
+local function SetIsLooted(entity)
+    if not lootedEntities[entity] then lootedEntities[entity] = true end
+end
+
+local function loadAnimDict(animDict)
+    RequestAnimDict(animDict)
+    while not HasAnimDictLoaded(animDict) do
+        RequestAnimDict(animDict)
+        Wait(1)
+    end
+end
+
 function Npc.Functions.Loot(entity)
-    TaskTurnPedToFaceEntity(PlayerPedId(), entity, 5000)
-    local success = lib.progressCircle({duration = search_time, position = 'bottom', useWhileDead = false, canCancel = false, disable = {car = true}, anim = {dict = 'amb@world_human_gardener_plant@male@base', clip = 'base'}})
-    if success then TriggerServerEvent('ox_inventory:lootnpc', PedToNet(entity)) end
+    if IsAlreadyLooted(entity) then 
+        lib.notify("This citizen is already been robbed by somebody..")
+    else
+        loadAnimDict('amb@medic@standing@kneel@base')
+	    loadAnimDict('anim@gangops@facility@servers@bodysearch@')
+	    TaskPlayAnim(PlayerPedId(), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false)
+	    TaskPlayAnim(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false)
+	    Wait(5000)
+	    StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@" ,"player_search", 1.0)
+        ClearPedTasks(PlayerPedId())
+        SetIsLooted(entity)
+        TriggerServerEvent('ox_inventory:lootnpc', PedToNet(entity))     
+    end
 end
 
 if shared.target then
@@ -448,8 +479,8 @@ if shared.target then
             icon = 'fas fa-skull-crossbones',
             label = "Search Citizen",
             onSelect = function(data)
-                if not shared.useNpcLootWhenDead then return false end
-                if not IsEntityDead(entity) then return false end
+                TaskTurnPedToFaceEntity(PlayerPedId(), data.entity, 5000)
+                Wait(1500)
                 Npc.Functions.Loot(PedToNet(data.entity))
             end,
             canInteract = function(entity, distance, coords, name)
@@ -457,7 +488,7 @@ if shared.target then
                 if not IsEntityDead(entity) then return false end
                 return true
             end,
-            distance = 2.5
+            distance = 1.0
         }
     })
 end

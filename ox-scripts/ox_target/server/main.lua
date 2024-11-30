@@ -22,6 +22,14 @@ RegisterNetEvent('ox_target:toggleEntityDoor', function(netId, door)
     TriggerClientEvent('ox_target:toggleEntityDoor', owner, netId, door)
 end)
 
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= 'qb-target' then 
+        --StopResource('qb-target')
+    elseif resource == 'qb-target' then 
+        --StopResource('qb-target')
+    end
+end)
+
 CreateThread(function()
     local arr = {}
     local num = 0

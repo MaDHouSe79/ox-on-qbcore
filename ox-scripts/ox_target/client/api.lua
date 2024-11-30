@@ -169,7 +169,7 @@ local function addTarget(target, options, resource)
             end
         end
 
-        num += 1
+        num = num + 1
         target[num] = options[i]
     end
 end
@@ -452,7 +452,7 @@ function options_mt:set(entity, _type, model)
     if _type == 1 and IsPedAPlayer(entity) then
         self:wipe()
         self.globalTarget = players
-        options_mt.size += 1
+        options_mt.size = options_mt.size + 1
 
         return
     end
@@ -463,11 +463,11 @@ function options_mt:set(entity, _type, model)
     self.model = models[model]
     self.entity = netId and entities[netId] or nil
     self.localEntity = localEntities[entity]
-    options_mt.size += 1
+    options_mt.size = options_mt.size + 1
 
-    if self.model then options_mt.size += 1 end
-    if self.entity then options_mt.size += 1 end
-    if self.localEntity then options_mt.size += 1 end
+    if self.model then options_mt.size = options_mt.size+ 1 end
+    if self.entity then options_mt.size = options_mt.size + 1 end
+    if self.localEntity then options_mt.size = options_mt.size + 1 end
 end
 
 ---@type OxTargetOption[]
