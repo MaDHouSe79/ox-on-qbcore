@@ -15,7 +15,7 @@ local Query = {
 
 local function conversionScript()
 	shared.ready = false
-	local file = GetCurrentResourceName()..'/setup/convert.lua'
+	local file = '/modules/mysql/convert.lua'
 	local import = LoadResourceFile(shared.resource, file)
 	local func = load(import, ('@@%s/%s'):format(shared.resource, file))
 	conversionScript = func()
