@@ -3,8 +3,7 @@ if not lib then return end
 local Query = {
     SELECT_STASH = 'SELECT data FROM ox_inventory WHERE owner = ? AND name = ?',
     UPDATE_STASH = 'UPDATE ox_inventory SET data = ? WHERE owner = ? AND name = ?',
-    UPSERT_STASH =
-    'INSERT INTO ox_inventory (data, owner, name) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data)',
+    UPSERT_STASH = 'INSERT INTO ox_inventory (data, owner, name) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data)',
     INSERT_STASH = 'INSERT INTO ox_inventory (owner, name) VALUES (?, ?)',
     SELECT_GLOVEBOX = 'SELECT plate, glovebox FROM `{vehicle_table}` WHERE `{vehicle_column}` = ?',
     SELECT_TRUNK = 'SELECT plate, trunk FROM `{vehicle_table}` WHERE `{vehicle_column}` = ?',
@@ -13,6 +12,29 @@ local Query = {
     UPDATE_GLOVEBOX = 'UPDATE `{vehicle_table}` SET glovebox = ? WHERE `{vehicle_column}` = ?',
     UPDATE_PLAYER = 'UPDATE `{user_table}` SET inventory = ? WHERE `{user_column}` = ?',
 }
+
+local function conversionScript()
+	shared.ready = false
+	local file = GetCurrentResourceName()..'/setup/convert.lua'
+	local import = LoadResourceFile(shared.resource, file)
+	local func = load(import, ('@@%s/%s'):format(shared.resource, file))
+	conversionScript = func()
+end
+
+local function convertinventory()
+	if type(conversionScript) == 'function' then conversionScript() end
+	local core = nil
+	if GetResourceState("es_extended") ~= 'missing' then
+		core = 'esx'
+	elseif GetResourceState("qb-core") ~= 'missing' then
+		core = 'qb'
+	elseif GetResourceState("qbx-core") ~= 'missing' then
+		core = 'qbx'
+	end
+	local convert = core and conversionScript[core]
+	if not convert then return warn('Invalid conversion argument. Valid options: qb. qbx. esx') end
+	CreateThread(convert)
+end
 
 Citizen.CreateThreadNow(function()
     local playerTable, playerColumn, vehicleTable, vehicleColumn
@@ -47,8 +69,7 @@ Citizen.CreateThreadNow(function()
     end
 
     for k, v in pairs(Query) do
-        Query[k] = v:gsub('{user_table}', playerTable):gsub('{user_column}', playerColumn):gsub('{vehicle_table}',
-            vehicleTable):gsub('{vehicle_column}', vehicleColumn)
+        Query[k] = v:gsub('{user_table}', playerTable):gsub('{user_column}', playerColumn):gsub('{vehicle_table}', vehicleTable):gsub('{vehicle_column}', vehicleColumn)
     end
 
     Wait(0)
@@ -63,6 +84,9 @@ Citizen.CreateThreadNow(function()
 			`lastupdated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 			UNIQUE KEY `owner` (`owner`,`name`)
 		)]])
+
+        Wait(1000)
+        convertinventory()
     else
         -- Shouldn't be needed anymore; was used for some data conversion for v2.5.0 (back in March 2022)
         -- result = MySQL.query.await("SELECT owner, name FROM ox_inventory WHERE NOT owner = ''")
