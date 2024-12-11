@@ -506,13 +506,12 @@ lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, m
 	end
 end)
 
+--[[
 local function conversionScript()
 	shared.ready = false
-
 	local file = 'setup/convert.lua'
 	local import = LoadResourceFile(shared.resource, file)
-	local func = load(import, ('@@%s/%s'):format(shared.resource, file)) --[[@as function]]
-
+	local func = load(import, ('@@%s/%s'):format(shared.resource, file))
 	conversionScript = func()
 end
 
@@ -520,16 +519,13 @@ RegisterCommand('convertinventory', function(source, args)
 	if source ~= 0 then return warn('This command can only be executed with the server console.') end
 	if type(conversionScript) == 'function' then conversionScript() end
 	local arg = args[1]
-
 	local convert = arg and conversionScript[arg]
-
 	if not convert then
 		return warn('Invalid conversion argument. Valid options: esx, esxproperty')
 	end
-
 	CreateThread(convert)
 end, true)
-
+]]
 
 lib.addCommand({'additem', 'giveitem'}, {
 	help = 'Gives an item to a player with the given id',
