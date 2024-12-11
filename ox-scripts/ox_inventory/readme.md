@@ -28,7 +28,7 @@
 
 # ox_inventory that works with qbcore.
 - Don't forget to add `exec @ox_inventory/settings.cfg` in the server.cfg
-- after you start the server you need to type `convertinventory qb` in the server console.
+- after you start the server it auto convert your inventory to ox_invnetory.
 
 # Dependencies
 - [oxmysql](https://github.com/overextended/oxmysql/releases)
