@@ -5,20 +5,20 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/issues">
-    <img src="https://img.shields.io/github/issues/MaDHouSe79/mh-parkingV2"/> 
+  <a href="https://github.com/MaDHouSe79/ox-on-qbcore/issues">
+    <img src="https://img.shields.io/github/issues/MaDHouSe79/ox-on-qbcore"/> 
   </a>
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/watchers">
-    <img src="https://img.shields.io/github/watchers/MaDHouSe79/mh-parkingV2"/> 
+  <a href="https://github.com/MaDHouSe79/ox-on-qbcore/watchers">
+    <img src="https://img.shields.io/github/watchers/MaDHouSe79/ox-on-qbcore"/> 
   </a> 
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/network/members">
-    <img src="https://img.shields.io/github/forks/MaDHouSe79/mh-parkingV2"/> 
+  <a href="https://github.com/MaDHouSe79/ox-on-qbcore/network/members">
+    <img src="https://img.shields.io/github/forks/MaDHouSe79/ox-on-qbcore"/> 
   </a>  
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/stargazers">
-    <img src="https://img.shields.io/github/stars/MaDHouSe79/mh-parkingV2?color=white"/> 
+  <a href="https://github.com/MaDHouSe79/ox-on-qbcore/stargazers">
+    <img src="https://img.shields.io/github/stars/MaDHouSe79/ox-on-qbcore?color=white"/> 
   </a>
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/MaDHouSe79/mh-parkingV2?color=black"/> 
+  <a href="https://github.com/MaDHouSe79/ox-on-qbcore/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/MaDHouSe79/ox-on-qbcore?color=black"/> 
   </a>      
 </p>
 
