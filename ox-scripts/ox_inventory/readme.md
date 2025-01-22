@@ -4,9 +4,8 @@
     <h3 align="center">A passionate allround developer </h3>    
 </p>
 
-# My Youtube Channel and Discord Server
+# Youtube Channel
 - [Subscribe](https://www.youtube.com/c/@MaDHouSe79) 
-- [Discord](https://discord.gg/vJ9EukCmJQ)
 
 # ox_inventory that works with qbcore.
 - Don't forget to add `exec @ox_inventory/settings.cfg` in the server.cfg
