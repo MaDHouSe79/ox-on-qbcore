@@ -4,24 +4,6 @@
     <h3 align="center">A passionate allround developer </h3>    
 </p>
 
-<p align="center">
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/issues">
-    <img src="https://img.shields.io/github/issues/MaDHouSe79/mh-parkingV2"/> 
-  </a>
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/watchers">
-    <img src="https://img.shields.io/github/watchers/MaDHouSe79/mh-parkingV2"/> 
-  </a> 
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/network/members">
-    <img src="https://img.shields.io/github/forks/MaDHouSe79/mh-parkingV2"/> 
-  </a>  
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/stargazers">
-    <img src="https://img.shields.io/github/stars/MaDHouSe79/mh-parkingV2?color=white"/> 
-  </a>
-  <a href="https://github.com/MaDHouSe79/mh-parkingV2/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/MaDHouSe79/mh-parkingV2?color=black"/> 
-  </a>      
-</p>
-
 # My Youtube Channel and Discord Server
 - [Subscribe](https://www.youtube.com/c/@MaDHouSe79) 
 - [Discord](https://discord.gg/vJ9EukCmJQ)
@@ -45,7 +27,7 @@
 
 # Creatits.
 - All the Creatits goes to the maker of ox_inventory, 
-- i just added some stuff to it and keep it running on qc-core.
+- i just added some stuff to it and keep it running on qb-core.
 
 # 🐞 Any bugs issues or suggestions, let my know. 👊😎
 
