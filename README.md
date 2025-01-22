@@ -24,7 +24,6 @@
 
 # My Youtube Channel and Discord
 - [Subscribe](https://www.youtube.com/c/@MaDHouSe79) 
-- [Discord](https://discord.gg/vJ9EukCmJQ)
 
 # OX for QB-CORE
 - All credits go to the owner of ox resources, i'm just a dev that make this resources works again for qbcore, 
